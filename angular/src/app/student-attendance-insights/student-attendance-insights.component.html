@@ -1,11 +1,12 @@
-<div class="d-flex align-items-center justify-content-between mb-3">
-    <h4 class="m-0">Student Attendance Insights</h4>
-
-    <button class="btn btn-outline-primary" type="button" (click)="load()" [disabled]="loading">
+<abp-page [title]="'Student Attendance Insights' | abpLocalization">
+     <abp-page-toolbar-container class="col">
+    <div class="text-end">
+      <button class="btn btn-outline-primary" type="button" (click)="load()" [disabled]="loading">
         <i class="fas fa-chart-bar me-1"></i>
         {{ loading ? 'Loading...' : 'Select Students' }}
     </button>
-</div>
+    </div>
+  </abp-page-toolbar-container>
 
 <div class="card mb-3">
     <div class="card-body">
@@ -109,3 +110,4 @@
         </div>
     </div>
 </div>
+</abp-page>

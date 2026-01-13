@@ -1,12 +1,12 @@
-<div class="d-flex align-items-center justify-content-between mb-3">
-  <h4 class="m-0">Staff Attendance Insights</h4>
-
-  <button class="btn btn-outline-primary" type="button" (click)="load()" [disabled]="loading">
-    <i class="fas fa-chart-bar me-1"></i>
-    {{ loading ? 'Loading...' : 'Select Staff' }}
-  </button>
-</div>
-
+<abp-page [title]="'Staff Attendance Insights' | abpLocalization">
+     <abp-page-toolbar-container class="col">
+    <div class="text-end">
+      <button class="btn btn-outline-primary" type="button" (click)="load()" [disabled]="loading">
+        <i class="fas fa-chart-bar me-1"></i>
+        {{ loading ? 'Loading...' : 'Select Staff' }}
+    </button>
+    </div>
+  </abp-page-toolbar-container>
 <div class="card mb-3">
   <div class="card-body">
     <form [formGroup]="form" class="row g-3">
@@ -99,3 +99,4 @@
     </div>
   </div>
 </div>
+</abp-page>
