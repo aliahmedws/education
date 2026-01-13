@@ -31,6 +31,15 @@
     "Permission:StudentAttendance": "Student Attendance",
     "Permission:StudentAttendanceInsights": "Student Attendance Insights",
 
+    "Permission:Staffs": "Staff Management",
+    "Permission:Staffs.Create": "Create",
+    "Permission:Staffs.Edit": "Edit",
+    "Permission:Staffs.Delete": "Delete",
+    "Permission:StaffMain": "Staffs (Module)",
+    "Permission:StaffList": "Staff List",
+    "Permission:StaffAttendance": "Staff Attendance",
+    "Permission:StaffAttendanceInsights": "Staff Attendance Insights",
+
 
     "Menu:Dashboard": "Dashboard",
     "Menu:Students": "Students",
@@ -397,9 +406,12 @@
     "DateFrom": "Date From",
     "DateTo": "Date To",
     "Help:Attendance.Student": "Select a student to mark attendance.",
+    "Help:Attendance.Staff": "Select a staff to mark attendance.",
     "GenerateAttendanceTemplate": "Generate Attendance Template",
     "ImportExcel": "Import Excel",
-    "Menu:StudentAttendanceInsights": "Attendance Insights"
+    "Menu:StudentAttendanceInsights": "Attendance Insights",
+    "Menu:StaffAttendance": "Staff Attendance",
+    "Menu:StaffAttendanceInsights": "Attendance Insights"
 
   }
 }

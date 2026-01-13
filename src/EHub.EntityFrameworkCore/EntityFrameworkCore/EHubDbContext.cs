@@ -1,4 +1,18 @@
+using EHub.FileAttachments;
+using EHub.StaffAttendances;
+using EHub.StaffDocuments;
+using EHub.Staffs;
+using EHub.StudentAttendances;
+using EHub.StudentDocuments;
+using EHub.Students;
+using EHub.Subjects;
+using EHub.Teaching;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.BackgroundJobs.EntityFrameworkCore;
 using Volo.Abp.BlobStoring.Database.EntityFrameworkCore;
@@ -9,24 +23,11 @@ using Volo.Abp.EntityFrameworkCore.Modeling;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.EntityFrameworkCore;
+using Volo.Abp.OpenIddict.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
-using Volo.Abp.OpenIddict.EntityFrameworkCore;
 using Volo.Abp.TenantManagement;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
-using EHub.Students;
-using EHub.Staffs;
-using EHub.Subjects;
-using EHub.Teaching;
-using System.Linq;
-using System;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using System.Collections.Generic;
-using EHub.StudentDocuments;
-using EHub.FileAttachments;
-using EHub.StaffDocuments;
-using EHub.StudentAttendances;
 
 namespace EHub.EntityFrameworkCore;
 
@@ -48,6 +49,7 @@ public class EHubDbContext :
     public DbSet<StaffDocument> StaffDocuments { get; set; }
 
     public DbSet<StudentAttendance> StudentAttendances { get; set; }
+    public DbSet<StaffAttendance> StaffAttendances { get; set; }
     #region Entities from the modules
 
     /* Notice: We only implemented IIdentityProDbContext and ISaasDbContext
@@ -476,7 +478,24 @@ public class EHubDbContext :
                     .HasForeignKey(x => x.StudentId)
                         .OnDelete(DeleteBehavior.Cascade);
 
-            b.HasIndex(x => new { x.TenantId, x.StudentId, x.AttendanceDate });
         });
+
+        builder.Entity<StaffAttendance>(b =>
+        {
+            b.ToTable(EHubConsts.DbTablePrefix + "StaffAttendances", EHubConsts.DbSchema);
+            b.ConfigureByConvention();
+
+            b.Property(x => x.AttendanceDate).IsRequired();
+            b.Property(x => x.Status).IsRequired();
+
+            b.Property(x => x.Remarks).HasMaxLength(512);
+
+            b.HasOne(x => x.Staff)
+                .WithMany(x => x.StaffAttendances)
+                    .HasForeignKey(x => x.StaffId)
+                        .OnDelete(DeleteBehavior.Cascade);
+
+        });
+
     }
 }

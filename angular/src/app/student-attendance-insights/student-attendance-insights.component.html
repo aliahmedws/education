@@ -12,7 +12,7 @@
         <form [formGroup]="form" class="row g-3">
             <div class="col-12 col-md-3">
                 <label class="form-label">Class</label>
-                <nz-select formControlName="gradeLevel" class="w-100" nzShowSearch nzAllowClear>
+                <nz-select formControlName="gradeLevel" nzSize="large" class="w-100" nzShowSearch nzAllowClear>
                     <nz-option *ngFor="let g of gradeLevels" [nzValue]="g.value"
                         [nzLabel]="'::Enum:GradeLevel.' + g.value | abpLocalization">
                     </nz-option>
@@ -21,7 +21,7 @@
 
             <div class="col-12 col-md-3">
                 <label class="form-label">Section</label>
-                <nz-select formControlName="section" class="w-100" nzAllowClear>
+                <nz-select formControlName="section" class="w-100"  nzSize="large"nzAllowClear>
                     <nz-option *ngFor="let s of sections" [nzValue]="s.value"
                         [nzLabel]="'::Enum:Section.' + s.value | abpLocalization">
                     </nz-option>

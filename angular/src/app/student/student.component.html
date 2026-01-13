@@ -49,16 +49,16 @@
           </div>
 
           <div class="col-sm-2">
-            <label for="genderFilter">{{ '::Gender' | abpLocalization }}</label>
-            <nz-select [(ngModel)]="filters.gender" class="form-control" nzAllowClear nzSize="large" class="w-100">
+            <label>{{ '::Gender' | abpLocalization }}</label>
+            <nz-select [(ngModel)]="filters.gender" class="form-control-sm" nzAllowClear class="w-100">
             <nz-option *ngFor="let gender of genders" [nzValue]="gender.value"
               [nzLabel]="'::Enum:Gender.' + gender.value | abpLocalization"></nz-option>
           </nz-select>
           </div>
 
           <div class="col-sm-2">
-            <label for="statusFilter">{{ '::Status' | abpLocalization }}</label>
-            <nz-select [(ngModel)]="filters.status" class="form-control form-control-sm" nzAllowClear nzSize="large" class="w-100">
+            <label>{{ '::Status' | abpLocalization }}</label>
+            <nz-select [(ngModel)]="filters.status" class="form-control-sm" nzAllowClear class="w-100">
               <nz-option *ngFor="let status of status" [nzValue]="status.value"
                 [nzLabel]="'::Enum:Status.' + status.value | abpLocalization"></nz-option>
             </nz-select>

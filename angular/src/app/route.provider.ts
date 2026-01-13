@@ -69,6 +69,7 @@ function configureRoutes() {
       iconClass: 'fas fa-user-tie',
       order: 20,
       layout: eLayoutType.application,
+      requiredPolicy: 'EHub.StaffMenu',
     },
     {
       path: '/staffs',
@@ -77,6 +78,25 @@ function configureRoutes() {
       iconClass: 'fas fa-list',
       order: 1,
       layout: eLayoutType.application,
+      requiredPolicy: 'EHub.StaffMenu.StaffList',
+    },
+    {
+      path: '/staff-attendances',
+      name: '::Menu:StaffAttendance',
+      parentName: '::Menu:Staff',
+      iconClass: 'fas fa-clipboard-check',
+      order: 2,
+      layout: eLayoutType.application,
+      requiredPolicy: 'EHub.StaffMenu.StaffAttendance',
+    },
+    {
+      path: '/staff-attendance-insights',
+      name: '::Menu:StaffAttendanceInsights',
+      parentName: '::Menu:Staff',
+      iconClass: 'fas fa-chart-bar',
+      order: 3,
+      layout: eLayoutType.application,
+      requiredPolicy: 'EHub.StaffMenu.StaffAttendanceInsights',
     },
     // Example future routes:
     // {

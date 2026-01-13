@@ -1,5 +1,6 @@
 using AutoMapper;
 using EHub.FileAttachments;
+using EHub.StaffAttendances;
 using EHub.StaffDocuments;
 using EHub.Staffs;
 using EHub.StudentAttendances;
@@ -31,5 +32,8 @@ public class EHubApplicationAutoMapperProfile : Profile
             .ForMember(x => x.StudentName, opt => opt.MapFrom(src => src.Students.FirstName + ' ' + src.Students.LastName))
             .ForMember(x => x.AdmissionNo, opt => opt.MapFrom(src => src.Students.AdmissionNo));
 
+        CreateMap<StaffAttendance, StaffAttendanceDto>()
+       .ForMember(x => x.StaffName, opt => opt.MapFrom(src => src.Staff.FirstName + ' ' + src.Staff.LastName))
+       .ForMember(x => x.EmployeeCode, opt => opt.MapFrom(src => src.Staff.EmployeeCode));
     }
 }
