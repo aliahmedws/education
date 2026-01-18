@@ -36,6 +36,9 @@ const routes: Routes = [
   { path: 'student-attendance-insights', loadChildren: () => import('./student-attendance-insights/student-attendance-insights.module').then(m => m.StudentAttendanceInsightsModule) },
   { path: 'staff-attendances', loadChildren: () => import('./staff-attendance/staff-attendance.module').then(m => m.StaffAttendanceModule) },
   { path: 'staff-attendance-insights', loadChildren: () => import('./staff-attendance-insights/staff-attendance-insights.module').then(m => m.StaffAttendanceInsightsModule) },
+  { path: 'fee-heads', loadChildren: () => import('./fee-module/fee-head/fee-head.module').then(m => m.FeeHeadModule) },
+  { path: 'fee-heads', loadChildren: () => import('./fee-module/fee-head/fee-head.module').then(m => m.FeeHeadModule) },
+  { path: 'fee-structures', loadChildren: () => import('./fee-module/fee-structure/fee-structure.module').then(m => m.FeeStructureModule) },
 ];
 
 @NgModule({

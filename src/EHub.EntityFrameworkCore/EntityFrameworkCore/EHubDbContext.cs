@@ -1,3 +1,6 @@
+using EHub.FeeModule;
+using EHub.FeeModule.FeeHeads;
+using EHub.FeeModule.FeeStructures;
 using EHub.FileAttachments;
 using EHub.StaffAttendances;
 using EHub.StaffDocuments;
@@ -50,6 +53,8 @@ public class EHubDbContext :
 
     public DbSet<StudentAttendance> StudentAttendances { get; set; }
     public DbSet<StaffAttendance> StaffAttendances { get; set; }
+    public DbSet<FeeHead> FeeHeads { get; set; }
+    public DbSet<FeeStructure> FeeStructures { get; set; }
     #region Entities from the modules
 
     /* Notice: We only implemented IIdentityProDbContext and ISaasDbContext
@@ -495,6 +500,44 @@ public class EHubDbContext :
                     .HasForeignKey(x => x.StaffId)
                         .OnDelete(DeleteBehavior.Cascade);
 
+        });
+
+        builder.Entity<FeeHead>(b =>
+        {
+            b.ToTable(EHubConsts.DbTablePrefix + "FeeHeads", EHubConsts.DbSchema);
+            b.ConfigureByConvention();
+
+            b.Property(x => x.Name)
+                .IsRequired()
+                .HasMaxLength(FeeModuleConsts.NameMaxLength);
+
+            b.Property(x => x.IsActive)
+                .IsRequired()
+                .HasDefaultValue(true);
+        });
+
+        builder.Entity<FeeStructure>(b =>
+        {
+            b.ToTable(EHubConsts.DbTablePrefix + "FeeStructures", EHubConsts.DbSchema);
+            b.ConfigureByConvention();
+
+            b.Property(x => x.GradeLevel)
+                .IsRequired();
+
+            b.Property(x => x.Shift)
+                .IsRequired();
+
+            b.Property(x => x.Term)
+                .IsRequired();
+
+            b.Property(x => x.EffectiveFrom)
+                .IsRequired();
+
+            b.Property(x => x.EffectiveTo);
+
+            b.Property(x => x.IsActive)
+                .IsRequired()
+                .HasDefaultValue(true);
         });
 
     }

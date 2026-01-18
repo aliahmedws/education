@@ -35,6 +35,16 @@ public class EHubPermissionDefinitionProvider : PermissionDefinitionProvider
         staffsPermission.AddChild(EHubPermissions.Staffs.Edit, L("Permission:Staffs.Edit"));
         staffsPermission.AddChild(EHubPermissions.Staffs.Delete, L("Permission:Staffs.Delete"));
 
+        var feeHeadsPermission = myGroup.AddPermission(EHubPermissions.FeeHeads.Default, L("Permission:FeeHeads"));
+        feeHeadsPermission.AddChild(EHubPermissions.FeeHeads.Create, L("Permission:FeeHeads.Create"));
+        feeHeadsPermission.AddChild(EHubPermissions.FeeHeads.Edit, L("Permission:FeeHeads.Edit"));
+        feeHeadsPermission.AddChild(EHubPermissions.FeeHeads.Delete, L("Permission:FeeHeads.Delete"));
+
+        var feestructuresPermission = myGroup.AddPermission(EHubPermissions.FeeStructures.Default, L("Permission:FeeStructures"));
+        feestructuresPermission.AddChild(EHubPermissions.FeeStructures.Create, L("Permission:FeeStructures.Create"));
+        feestructuresPermission.AddChild(EHubPermissions.FeeStructures.Edit, L("Permission:FeeStructures.Edit"));
+        feestructuresPermission.AddChild(EHubPermissions.FeeStructures.Delete, L("Permission:FeeStructures.Delete"));
+
 
     }
 

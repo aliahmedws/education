@@ -125,5 +125,30 @@ function configureRoutes() {
       order: 1,
       layout: eLayoutType.application,
     },
+    {
+      name: '::Menu:Fees',
+      iconClass: 'fas fa-money-bill-wave',
+      order: 40,
+      layout: eLayoutType.application,
+      // requiredPolicy: 'EHub.FeeMenu', // optional (remove if you don't use it)
+    },
+    {
+      path: '/fee-heads',
+      name: '::Menu:FeeHeads',
+      parentName: '::Menu:Fees',
+      iconClass: 'fas fa-list',
+      order: 1,
+      layout: eLayoutType.application,
+      // requiredPolicy: 'EHub.FeeMenu.FeeHeads', // optional
+    },
+    {
+      path: '/fee-structures',
+      name: '::Menu:FeeStructures',
+      parentName: '::Menu:Fees',
+      iconClass: 'fas fa-sitemap',
+      order: 2,
+      layout: eLayoutType.application,
+      // requiredPolicy: 'EHub.FeeMenu.FeeStructures', // optional
+    },
   ]);
 }

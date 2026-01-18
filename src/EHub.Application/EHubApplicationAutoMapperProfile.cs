@@ -1,4 +1,6 @@
 using AutoMapper;
+using EHub.FeeModule.FeeHeads;
+using EHub.FeeModule.FeeStructures;
 using EHub.FileAttachments;
 using EHub.StaffAttendances;
 using EHub.StaffDocuments;
@@ -35,5 +37,8 @@ public class EHubApplicationAutoMapperProfile : Profile
         CreateMap<StaffAttendance, StaffAttendanceDto>()
        .ForMember(x => x.StaffName, opt => opt.MapFrom(src => src.Staff.FirstName + ' ' + src.Staff.LastName))
        .ForMember(x => x.EmployeeCode, opt => opt.MapFrom(src => src.Staff.EmployeeCode));
+
+        CreateMap<FeeHead, FeeHeadDto>();
+        CreateMap<FeeStructure, FeeStructureDto>();
     }
 }
