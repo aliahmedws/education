@@ -1,6 +1,7 @@
 ﻿using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
@@ -48,5 +49,11 @@ public class FeeHeadController(IFeeHeadAppService feeHeadAppService) : AbpContro
     public Task SetActiveAsync(Guid id, [FromBody] bool isActive)
     {
         return feeHeadAppService.SetActiveAsync(id, isActive);
+    }
+
+    [HttpGet("get-fee-lookup")]
+    public Task<List<FeeHeadLookupDto>> GetFeeLookupAsync()
+    {
+        return feeHeadAppService.GetFeeLookupAsync();
     }
 }

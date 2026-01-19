@@ -1,6 +1,8 @@
 using EHub.FeeModule;
 using EHub.FeeModule.FeeHeads;
+using EHub.FeeModule.FeeStructureItems;
 using EHub.FeeModule.FeeStructures;
+using EHub.FeeModule.StudentFeeProfiles;
 using EHub.FileAttachments;
 using EHub.StaffAttendances;
 using EHub.StaffDocuments;
@@ -55,6 +57,8 @@ public class EHubDbContext :
     public DbSet<StaffAttendance> StaffAttendances { get; set; }
     public DbSet<FeeHead> FeeHeads { get; set; }
     public DbSet<FeeStructure> FeeStructures { get; set; }
+    public DbSet<FeeStructureItem> FeeStructureItems { get; set; }
+    public DbSet<StudentFeeProfile> StudentFeeProfiles { get; set; }
     #region Entities from the modules
 
     /* Notice: We only implemented IIdentityProDbContext and ISaasDbContext
@@ -540,5 +544,56 @@ public class EHubDbContext :
                 .HasDefaultValue(true);
         });
 
+        builder.Entity<FeeStructureItem>(b =>
+        {
+            b.ToTable(EHubConsts.DbTablePrefix + "FeeStructureItems", EHubConsts.DbSchema);
+            b.ConfigureByConvention();
+
+            b.Property(x => x.FeeStructureId).IsRequired();
+            b.Property(x => x.FeeHeadId).IsRequired();
+
+            b.Property(x => x.MonthlyAmount)
+                .IsRequired()
+                .HasColumnType("decimal(18,2)");
+
+            b.Property(x => x.IsMandatory)
+                .IsRequired()
+                .HasDefaultValue(false);
+
+            b.HasOne(x => x.FeeStructure)
+                .WithMany()
+                .HasForeignKey(x => x.FeeStructureId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.NoAction);
+
+            b.HasOne(x => x.FeeHead)
+                .WithMany()
+                .HasForeignKey(x => x.FeeHeadId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.NoAction);
+
+        });
+        builder.Entity<StudentFeeProfile>(b =>
+        {
+            b.ToTable(EHubConsts.DbTablePrefix + "StudentFeeProfiles", EHubConsts.DbSchema);
+            b.ConfigureByConvention();
+
+            b.Property(x => x.StudentId).IsRequired();
+            b.Property(x => x.FeeStructureId).IsRequired();
+
+            b.Property(x => x.EffectiveFrom).IsRequired();
+            b.Property(x => x.EffectiveTo);
+            b.Property(x => x.IsActive).IsRequired().HasDefaultValue(true);
+
+            b.HasOne(x => x.Student)
+                .WithMany()
+                .HasForeignKey(x => x.StudentId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            b.HasOne(x => x.FeeStructure)
+                .WithMany()
+                .HasForeignKey(x => x.FeeStructureId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
     }
 }

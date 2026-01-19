@@ -1,6 +1,7 @@
 ﻿using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
@@ -38,4 +39,10 @@ public class FeeStructureController(IFeeStructureAppService appService)
     [HttpPut("{id}/active")]
     public Task SetActiveAsync(Guid id, [FromBody] bool isActive)
         => appService.SetActiveAsync(id, isActive);
+
+    [HttpGet("fee-structure-lookup")]
+    public Task<List<FeeStructureLookupDto>> GetFeeStructureLookupAsync()
+    {
+        return appService.GetFeeStructureLookupAsync();
+    }
 }

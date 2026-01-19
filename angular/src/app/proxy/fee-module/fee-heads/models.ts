@@ -11,6 +11,11 @@ export interface FeeHeadDto extends FullAuditedEntityDto<string> {
   isActive: boolean;
 }
 
+export interface FeeHeadLookupDto {
+  id?: string;
+  name?: string;
+}
+
 export interface GetFeeHeadListInput extends PagedAndSortedResultRequestDto {
   filter?: string;
   isActive?: boolean;

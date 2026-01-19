@@ -1,4 +1,6 @@
-﻿using System;
+﻿using EHub.FeeModule.FeeStructureItems;
+using System;
+using System.Collections.Generic;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.MultiTenancy;
@@ -11,6 +13,8 @@ public class FeeHead : FullAuditedAggregateRoot<Guid>, IMultiTenant
     public string Name { get; private set; }
 
     public bool IsActive { get; private set; } = true;
+    //public virtual ICollection<FeeStructureItem> FeeStructureItems { get; set; } = new List<FeeStructureItem>();
+
 
     private FeeHead()
     {

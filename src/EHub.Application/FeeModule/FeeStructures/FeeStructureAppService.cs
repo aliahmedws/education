@@ -170,4 +170,27 @@ public class FeeStructureAppService : ApplicationService, IFeeStructureAppServic
             // throw new UserFriendlyException(L["FeeStructureOverlap"]);
         }
     }
+
+    public async Task<List<FeeStructureLookupDto>> GetFeeStructureLookupAsync()
+    {
+        var queryable = await _repository.GetQueryableAsync();
+
+        queryable = queryable.Where(x => x.IsActive == true);
+
+        var items = await AsyncExecuter.ToListAsync(
+            queryable
+                .OrderByDescending(x => x.EffectiveFrom)
+                .ThenBy(x => x.GradeLevel)
+                .ThenBy(x => x.Shift)
+                .ThenBy(x => x.Term)
+        );
+
+        return items.Select(x => new FeeStructureLookupDto
+        {
+            Id = x.Id,
+            DisplayName = $"{x.GradeLevel} - {x.Shift} - {x.Term} ({x.EffectiveFrom:yyyy-MM-dd}"
+                          + (x.EffectiveTo.HasValue ? $" to {x.EffectiveTo:yyyy-MM-dd}" : " onwards")
+                          + ")"
+        }).ToList();
+    }
 }

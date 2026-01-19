@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
@@ -18,4 +19,5 @@ public interface IFeeHeadAppService : IApplicationService
     Task DeleteAsync(Guid id);
 
     Task SetActiveAsync(Guid id, bool isActive);
+    Task<List<FeeHeadLookupDto>> GetFeeLookupAsync();
 }

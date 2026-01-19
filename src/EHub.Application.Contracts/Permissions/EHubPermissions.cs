@@ -51,4 +51,20 @@ public static class EHubPermissions
         public const string Edit = Default + ".Edit";
         public const string Delete = Default + ".Delete";
     }
+
+    public static class FeeStructureItems
+    {
+        public const string Default = GroupName + ".FeeStructureItems";
+        public const string Create = Default + ".Create";
+        public const string Edit = Default + ".Edit";
+        public const string Delete = Default + ".Delete";
+    }
+
+    public static class StudentFeeProfiles
+    {
+        public const string Default = GroupName + ".StudentFeeProfiles";
+        public const string Create = Default + ".Create";
+        public const string Edit = Default + ".Edit";
+        public const string Delete = Default + ".Delete";
+    }
 }

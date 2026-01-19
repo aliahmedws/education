@@ -1,4 +1,4 @@
-import type { CreateUpdateFeeHeadDto, FeeHeadDto, GetFeeHeadListInput } from './models';
+import type { CreateUpdateFeeHeadDto, FeeHeadDto, FeeHeadLookupDto, GetFeeHeadListInput } from './models';
 import { RestService, Rest } from '@abp/ng.core';
 import type { PagedResultDto } from '@abp/ng.core';
 import { Injectable } from '@angular/core';
@@ -31,6 +31,14 @@ export class FeeHeadService {
     this.restService.request<any, FeeHeadDto>({
       method: 'GET',
       url: `/api/app/fee-heads/${id}`,
+    },
+    { apiName: this.apiName,...config });
+  
+
+  getFeeLookup = (config?: Partial<Rest.Config>) =>
+    this.restService.request<any, FeeHeadLookupDto[]>({
+      method: 'GET',
+      url: '/api/app/fee-heads/get-fee-lookup',
     },
     { apiName: this.apiName,...config });
   

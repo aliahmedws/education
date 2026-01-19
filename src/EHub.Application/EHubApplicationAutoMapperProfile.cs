@@ -1,6 +1,8 @@
 using AutoMapper;
 using EHub.FeeModule.FeeHeads;
+using EHub.FeeModule.FeeStructureItems;
 using EHub.FeeModule.FeeStructures;
+using EHub.FeeModule.StudentFeeProfiles;
 using EHub.FileAttachments;
 using EHub.StaffAttendances;
 using EHub.StaffDocuments;
@@ -40,5 +42,7 @@ public class EHubApplicationAutoMapperProfile : Profile
 
         CreateMap<FeeHead, FeeHeadDto>();
         CreateMap<FeeStructure, FeeStructureDto>();
+        CreateMap<FeeStructureItem, FeeStructureItemDto>();
+        CreateMap<StudentFeeProfile, StudentFeeProfileDto>();
     }
 }

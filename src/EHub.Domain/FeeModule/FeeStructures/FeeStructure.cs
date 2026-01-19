@@ -1,5 +1,7 @@
-﻿using EHub.Students;
+﻿using EHub.FeeModule.FeeStructureItems;
+using EHub.Students;
 using System;
+using System.Collections.Generic;
 using Volo.Abp;
 using Volo.Abp.Auditing;
 using Volo.Abp.Domain.Entities.Auditing;
@@ -21,9 +23,10 @@ public class FeeStructure : FullAuditedAggregateRoot<Guid>, IMultiTenant
 
     public bool IsActive { get; private set; } = true;
 
+    //public virtual ICollection<FeeStructureItem> FeeStructureItems { get; set; } = new List<FeeStructureItem>();
+
     private FeeStructure()
     {
-        // ORM
     }
 
     public FeeStructure(

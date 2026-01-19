@@ -150,5 +150,23 @@ function configureRoutes() {
       layout: eLayoutType.application,
       // requiredPolicy: 'EHub.FeeMenu.FeeStructures', // optional
     },
+     {
+      path: '/fee-structure-items',
+      name: '::Menu:FeeStructureItems',
+      parentName: '::Menu:Fees',
+      iconClass: 'fas fa-layer-group',
+      order: 3,
+      layout: eLayoutType.application,
+      // requiredPolicy: 'EHub.FeeMenu.FeeStructures', // optional
+    },
+       {
+      path: '/student-fee-profiles',
+      name: '::Menu:StudentFeeProfiles',
+      parentName: '::Menu:Fees',
+      iconClass: 'fas fa-layer-group',
+      order: 4,
+      layout: eLayoutType.application,
+      // requiredPolicy: 'EHub.FeeMenu.FeeStructures', // optional
+    },
   ]);
 }

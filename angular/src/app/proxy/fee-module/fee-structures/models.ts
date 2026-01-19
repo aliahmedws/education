@@ -1,7 +1,7 @@
 import type { GradeLevel } from '../../students/grade-level.enum';
 import type { Shift } from '../../students/shift.enum';
 import type { Term } from '../../students/term.enum';
-import type { FullAuditedEntityDto, PagedAndSortedResultRequestDto } from '@abp/ng.core';
+import type { EntityDto, FullAuditedEntityDto, PagedAndSortedResultRequestDto } from '@abp/ng.core';
 
 export interface CreateUpdateFeeStructureDto {
   gradeLevel: GradeLevel;
@@ -20,6 +20,10 @@ export interface FeeStructureDto extends FullAuditedEntityDto<string> {
   effectiveFrom?: string;
   effectiveTo?: string;
   isActive: boolean;
+}
+
+export interface FeeStructureLookupDto extends EntityDto<string> {
+  displayName?: string;
 }
 
 export interface GetFeeStructureListInput extends PagedAndSortedResultRequestDto {

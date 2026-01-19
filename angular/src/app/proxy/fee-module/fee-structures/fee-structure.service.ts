@@ -1,4 +1,4 @@
-import type { CreateUpdateFeeStructureDto, FeeStructureDto, GetFeeStructureListInput } from './models';
+import type { CreateUpdateFeeStructureDto, FeeStructureDto, FeeStructureLookupDto, GetFeeStructureListInput } from './models';
 import { RestService, Rest } from '@abp/ng.core';
 import type { PagedResultDto } from '@abp/ng.core';
 import { Injectable } from '@angular/core';
@@ -31,6 +31,14 @@ export class FeeStructureService {
     this.restService.request<any, FeeStructureDto>({
       method: 'GET',
       url: `/api/app/fee-structures/${id}`,
+    },
+    { apiName: this.apiName,...config });
+  
+
+  getFeeStructureLookup = (config?: Partial<Rest.Config>) =>
+    this.restService.request<any, FeeStructureLookupDto[]>({
+      method: 'GET',
+      url: '/api/app/fee-structures/fee-structure-lookup',
     },
     { apiName: this.apiName,...config });
   

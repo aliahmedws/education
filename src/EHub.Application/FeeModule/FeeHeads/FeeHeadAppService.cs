@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
@@ -120,5 +121,22 @@ public class FeeHeadAppService : ApplicationService, IFeeHeadAppService
         {
             throw new UserFriendlyException($"Fee head '{normalized}' already exists.");
         }
+    }
+
+    public async Task<List<FeeHeadLookupDto>> GetFeeLookupAsync()
+    {
+        var queryable = await _repository.GetQueryableAsync();
+
+        queryable = queryable.Where(x => x.IsActive == true);
+
+        var items = await AsyncExecuter.ToListAsync(
+            queryable.OrderBy(x => x.Name)
+        );
+
+        return items.Select(x => new FeeHeadLookupDto
+        {
+            Id = x.Id,
+            Name = x.Name,
+        }).ToList();
     }
 }

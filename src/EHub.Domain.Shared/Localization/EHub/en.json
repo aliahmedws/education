@@ -43,6 +43,14 @@
     "Permission:FeeStructures.Create": "Create",
     "Permission:FeeStructures.Edit": "Edit",
     "Permission:FeeStructures.Delete": "Delete",
+    "Permission:FeeStructureItems": "Fee Structure Item Management",
+    "Permission:FeeStructureItems.Create": "Create",
+    "Permission:FeeStructureItems.Edit": "Edit",
+    "Permission:FeeStructureItems.Delete": "Delete",
+    "Permission:StudentFeeProfiles": "Student Fee Profiles Management",
+    "Permission:StudentFeeProfiles.Create": "Create",
+    "Permission:StudentFeeProfiles.Edit": "Edit",
+    "Permission:StudentFeeProfiles.Delete": "Delete",
 
     "Permission:StaffMain": "Staffs (Module)",
     "Permission:StaffList": "Staff List",
@@ -444,7 +452,27 @@
     "AreYouSureToDeactivate": "Are you sure you want to deactivate?",
     "Menu:Fees": "Fees",
     "FeeHeadActivated": "Fee Head Activated",
-    "FeeHeadDeactivated": "Fee Head Deactivated"
+    "FeeHeadDeactivated": "Fee Head Deactivated",
+    "Menu:FeeStructureItems": "Fee Structure Items",
+    "NewFeeStructureItem": "New Fee Structure Item",
+    "EditFeeStructureItem": "Edit Fee Structure Item",
+    "FeeHead": "Fee Head",
+    "FeeStructure": "Fee Structure",
+    "MonthlyAmount": "Monthly Amount",
+    "IsMandatory": "Mandatory",
+    "Actions": "Actions",
+    "Activate": "Activate",
+    "Deactivate": "Deactivate",
+    "Save": "Save",
+    "Close": "Close",
+    "Yes": "Yes",
+    "No": "No",
+    "ActivatedSuccessfully": "Activated successfully.",
+    "DeactivatedSuccessfully": "Deactivated successfully.",
+    "Menu:StudentFeeProfiles": "Student Fee Profiles",
+    "NewStudentFeeProfile": "New Student Fee Profile",
+    "EditStudentFeeProfile": "Edit Student Fee Profile",
+    "Student": "Student"
 
   }
 }
