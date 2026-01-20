@@ -1,9 +1,11 @@
-﻿using System;
+﻿using EHub.Students;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
+using Volo.Abp.Domain.Repositories;
 
 namespace EHub.FeeModule.StudentFeeProfiles;
 
@@ -11,13 +13,16 @@ namespace EHub.FeeModule.StudentFeeProfiles;
 public class StudentFeeProfileAppService : ApplicationService, IStudentFeeProfileAppService
 {
     private readonly IStudentFeeProfileRepository _repo;
+    private readonly IStudentRepository _studentRepository;
     private readonly StudentFeeProfileManager _manager;
 
     public StudentFeeProfileAppService(
         IStudentFeeProfileRepository repo,
-        StudentFeeProfileManager manager)
+         IStudentRepository studentRepository,
+    StudentFeeProfileManager manager)
     {
         _repo = repo;
+        _studentRepository = studentRepository;
         _manager = manager;
     }
 
@@ -92,4 +97,66 @@ public class StudentFeeProfileAppService : ApplicationService, IStudentFeeProfil
     {
         await _repo.DeleteAsync(id);
     }
+
+    public async Task<BulkAssignStudentFeeProfileResultDto> BulkAssignAsync(BulkAssignStudentFeeProfileDto input)
+    {
+        if (input.EffectiveTo.HasValue && input.EffectiveTo.Value.Date < input.EffectiveFrom.Date)
+            throw new UserFriendlyException("Invalid date range. EffectiveTo must be >= EffectiveFrom.");
+
+        var students = await _studentRepository.GetListAsync(
+            skipCount: 0,
+            maxResultCount: int.MaxValue, // careful if you have huge dataset
+            sorting: nameof(Student.FirstName),
+            filter: null,
+            admissionNo: null,
+            firstName: null,
+            lastName: null,
+            gradeLevel: input.GradeLevel,
+            section: input.Section,
+            shift: input.Shift,
+            term: input.Term,
+            dob: null,
+            gender: null,
+            status: null
+        );
+
+
+        var result = new BulkAssignStudentFeeProfileResultDto
+        {
+            TotalStudents = students.Count
+        };
+
+        foreach (var s in students)
+        {
+            // duplicate check: Student + FeeStructure + EffectiveFrom
+            var exists = await _repo.AnyAsync(x =>
+                x.StudentId == s.Id &&
+                x.FeeStructureId == input.FeeStructureId &&
+                x.EffectiveFrom == input.EffectiveFrom.Date);
+
+            if (exists)
+            {
+                if (!input.SkipExisting)
+                    throw new UserFriendlyException($"Duplicate exists for student: {s.FirstName} {s.LastName}");
+
+                result.SkippedExisting++;
+                result.SkippedStudentNames.Add($"{s.FirstName} {s.LastName}");
+                continue;
+            }
+
+            var entity = await _manager.CreateAsync(
+                s.Id,
+                input.FeeStructureId,
+                input.EffectiveFrom,
+                input.EffectiveTo,
+                input.IsActive
+            );
+
+            await _repo.InsertAsync(entity, autoSave: true);
+            result.Created++;
+        }
+
+        return result;
+    }
+
 }

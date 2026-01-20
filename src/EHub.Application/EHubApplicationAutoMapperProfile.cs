@@ -2,6 +2,9 @@ using AutoMapper;
 using EHub.FeeModule.FeeHeads;
 using EHub.FeeModule.FeeStructureItems;
 using EHub.FeeModule.FeeStructures;
+using EHub.FeeModule.LateFeePolices;
+using EHub.FeeModule.LateFeePolicies;
+using EHub.FeeModule.StudentFeeDiscounts;
 using EHub.FeeModule.StudentFeeProfiles;
 using EHub.FileAttachments;
 using EHub.StaffAttendances;
@@ -44,5 +47,20 @@ public class EHubApplicationAutoMapperProfile : Profile
         CreateMap<FeeStructure, FeeStructureDto>();
         CreateMap<FeeStructureItem, FeeStructureItemDto>();
         CreateMap<StudentFeeProfile, StudentFeeProfileDto>();
+
+        CreateMap<StudentFeeDiscount, StudentFeeDiscountDto>()
+            .ForMember(dest => dest.StudentName, opt => opt.MapFrom(src =>
+                src.Student != null ? $"{src.Student.FirstName} {src.Student.LastName}" : string.Empty))
+            .ForMember(dest => dest.FeeHeadName, opt => opt.MapFrom(src =>
+                src.FeeHead != null ? src.FeeHead.Name : "Total Fee"))
+            .ForMember(dest => dest.ApprovedByStaffName, opt => opt.MapFrom(src =>
+                src.ApprovedByStaff != null ? $"{src.ApprovedByStaff.FirstName} {src.ApprovedByStaff.LastName}" : null));
+
+        CreateMap<LateFeePolicy, LateFeePolicyDto>()
+           .ForMember(dest => dest.IsGlobal, opt => opt.MapFrom(src =>
+               !src.GradeLevel.HasValue &&
+               !src.Section.HasValue &&
+               !src.Shift.HasValue &&
+               !src.Term.HasValue));
     }
 }

@@ -40,6 +40,10 @@ public class StudentAppService : ApplicationService, IStudentAppService
             input.AdmissionNo,
             input.FirstName,
             input.LastName,
+            input.GradeLevel,
+            input.Section,
+            input.Shift,
+            input.Term,
             input.DOB,
             input.Gender,
             input.Status
@@ -53,6 +57,10 @@ public class StudentAppService : ApplicationService, IStudentAppService
             input.AdmissionNo,
             input.FirstName,
             input.LastName,
+            input.GradeLevel,
+            input.Section,
+            input.Shift,
+            input.Term,
             input.DOB,
             input.Gender,
             input.Status

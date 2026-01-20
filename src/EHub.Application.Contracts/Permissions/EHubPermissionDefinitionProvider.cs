@@ -55,6 +55,11 @@ public class EHubPermissionDefinitionProvider : PermissionDefinitionProvider
         studentFeeProfilesPermission.AddChild(EHubPermissions.StudentFeeProfiles.Edit, L("Permission:StudentFeeProfiles.Edit"));
         studentFeeProfilesPermission.AddChild(EHubPermissions.StudentFeeProfiles.Delete, L("Permission:StudentFeeProfiles.Delete"));
 
+        var studentFeeDiscountsPermission = myGroup.AddPermission(EHubPermissions.StudentFeeDiscounts.Default, L("Permission:StudentFeeDiscounts"));
+        studentFeeDiscountsPermission.AddChild(EHubPermissions.StudentFeeDiscounts.Create, L("Permission:StudentFeeDiscounts.Create"));
+        studentFeeDiscountsPermission.AddChild(EHubPermissions.StudentFeeDiscounts.Edit, L("Permission:StudentFeeDiscounts.Edit"));
+        studentFeeDiscountsPermission.AddChild(EHubPermissions.StudentFeeDiscounts.Delete, L("Permission:StudentFeeDiscounts.Delete"));
+
 
     }
 

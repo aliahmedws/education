@@ -3,8 +3,8 @@ import { ConfirmationService, ToasterService, Confirmation } from '@abp/ng.theme
 import { Component, inject, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { FeeStructureLookupDto, FeeStructureService } from 'src/app/proxy/fee-module/fee-structures';
-import { StudentFeeProfileDto, GetStudentFeeProfileListInput, StudentFeeProfileService, CreateUpdateStudentFeeProfileDto } from 'src/app/proxy/fee-module/student-fee-profiles';
-import { StudentLookupDto, StudentService } from 'src/app/proxy/students';
+import { StudentFeeProfileDto, GetStudentFeeProfileListInput, StudentFeeProfileService, CreateUpdateStudentFeeProfileDto, BulkAssignStudentFeeProfileResultDto, BulkAssignStudentFeeProfileDto } from 'src/app/proxy/fee-module/student-fee-profiles';
+import { gradeLevelOptions, sectionOptions, shiftOptions, StudentLookupDto, StudentService, termOptions } from 'src/app/proxy/students';
 
 @Component({
   selector: 'app-student-fee-profile',
@@ -26,6 +26,19 @@ export class StudentFeeProfileComponent implements OnInit{
 
   studentOptions: StudentLookupDto[] = [];
   feeStructureOptions: FeeStructureLookupDto[] = [];
+
+   // ---- BULK ASSIGN ----
+  isBulkModalOpen = false;
+  bulkForm!: FormGroup;
+
+  gradeLevels = gradeLevelOptions;
+  sections = sectionOptions;
+  shifts = shiftOptions;
+  terms = termOptions;
+
+  bulkResult?: BulkAssignStudentFeeProfileResultDto;
+  selectedBulk = {} as BulkAssignStudentFeeProfileDto;
+  isBulkSubmitting = false;
 
   public readonly list = inject(ListService);
   private readonly service = inject(StudentFeeProfileService);
@@ -156,4 +169,76 @@ export class StudentFeeProfileComponent implements OnInit{
     const dd = String(d.getDate()).padStart(2, '0');
     return `${yyyy}-${mm}-${dd}`;
   }
+
+    openBulkAssign(): void {
+    this.bulkResult = undefined;
+
+    this.bulkForm = this.fb.group({
+      gradeLevel: [ this.selectedBulk.gradeLevel || null, Validators.required],
+      section: [ this.selectedBulk.section || null],
+      shift: [ this.selectedBulk.shift || null],
+      term: [ this.selectedBulk.term || null],
+
+      feeStructureId: [ this.selectedBulk.feeStructureId || null, Validators.required],
+
+      effectiveFrom: [ this.selectedBulk.effectiveFrom || this.toDateInput(new Date()), Validators.required],
+      effectiveTo: [ this.selectedBulk.effectiveTo || null],
+
+      isActive: [ this.selectedBulk.isActive || true],
+      skipIfSameExists: [ this.selectedBulk.skipExisting || true],
+    });
+
+    this.isBulkModalOpen = true;
+  }
+
+  closeBulkAssign(): void {
+    this.isBulkModalOpen = false;
+    this.bulkForm?.reset();
+  }
+
+  bulkAssign(): void {
+    if (!this.bulkForm || this.bulkForm.invalid) return;
+
+    this.isBulkSubmitting = true;
+    this.bulkResult = undefined;
+
+    const v = this.bulkForm.value;
+
+    const input = {
+      gradeLevel: v.gradeLevel,
+      section: v.section,
+      shift: v.shift,
+      term: v.term,
+
+      feeStructureId: v.feeStructureId,
+
+      effectiveFrom: v.effectiveFrom ? new Date(v.effectiveFrom) : null,
+      effectiveTo: v.effectiveTo ? new Date(v.effectiveTo) : null,
+
+      isActive: !!v.isActive,
+      skipIfSameExists: !!v.skipIfSameExists,
+    } as any; // keep as any if proxy expects string dates; otherwise remove
+
+    // IMPORTANT:
+    // If your proxy expects string dates, convert them:
+    // input.effectiveFrom = v.effectiveFrom; input.effectiveTo = v.effectiveTo;
+
+    this.service.bulkAssign(input).subscribe({
+      next: (res) => {
+        this.bulkResult = res;
+        this.toaster.success('::BulkAssignedSuccessfully');
+        this.list.get(); // refresh table
+      },
+      error: (err) => {
+        const msg =
+          err?.error?.error?.message ||
+          err?.error?.message ||
+          err?.message ||
+          '::UnexpectedError';
+        this.toaster.error(msg);
+      },
+      complete: () => (this.isBulkSubmitting = false),
+    });
+  }
+
 }

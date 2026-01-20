@@ -52,6 +52,10 @@ export interface GetStudentListDto extends PagedAndSortedResultRequestDto {
   admissionNo?: string;
   firstName?: string;
   lastName?: string;
+  gradeLevel?: GradeLevel;
+  section?: Section;
+  term?: Term;
+  shift?: Shift;
   dob?: string;
   gender?: Gender;
   status?: Status;

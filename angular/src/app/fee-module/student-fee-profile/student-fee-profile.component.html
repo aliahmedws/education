@@ -3,6 +3,15 @@
     <div class="text-end">
       <button
         *abpPermission="'EHub.StudentFeeProfiles.Create'"
+        class="btn btn-outline-primary btn-sm me-2"
+        type="button"
+        (click)="openBulkAssign()"
+      >
+        <i class="fas fa-users me-1"></i> {{ '::BulkAssignStudentFeeProfiles' | abpLocalization }}
+      </button>
+
+      <button
+        *abpPermission="'EHub.StudentFeeProfiles.Create'"
         class="btn btn-outline-primary btn-sm"
         type="button"
         (click)="create()"
@@ -246,3 +255,136 @@
     </button>
   </ng-template>
 </abp-modal>
+
+<!-- Bulk Assign Modal -->
+<abp-modal [(visible)]="isBulkModalOpen">
+  <ng-template #abpHeader>
+    <h3>{{ '::BulkAssignStudentFeeProfiles' | abpLocalization }}</h3>
+  </ng-template>
+
+  <ng-template #abpBody>
+    <form [formGroup]="bulkForm">
+      <div class="row">
+        <div class="col-md-6">
+          <label class="form-label">
+            {{ '::GradeLevel' | abpLocalization }} <span class="text-danger">*</span>
+          </label>
+          <nz-select class="w-100" nzAllowClear nzShowSearch formControlName="gradeLevel">
+            <nz-option
+              *ngFor="let g of gradeLevels"
+              [nzValue]="g.value"
+              [nzLabel]="'::Enum:GradeLevel.' + g.value | abpLocalization"
+            ></nz-option>
+          </nz-select>
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label">{{ '::Section' | abpLocalization }}</label>
+          <nz-select class="w-100" nzAllowClear nzShowSearch formControlName="section">
+            <nz-option
+              *ngFor="let s of sections"
+              [nzValue]="s.value"
+              [nzLabel]="'::Enum:Section.' + s.value | abpLocalization"
+            ></nz-option>
+          </nz-select>
+        </div>
+      </div>
+
+      <div class="row mt-3">
+        <div class="col-md-6">
+          <label class="form-label">{{ '::Shift' | abpLocalization }}</label>
+          <nz-select class="w-100" nzAllowClear nzShowSearch formControlName="shift">
+            <nz-option
+              *ngFor="let sh of shifts"
+              [nzValue]="sh.value"
+              [nzLabel]="'::Enum:Shift.' + sh.value | abpLocalization"
+            ></nz-option>
+          </nz-select>
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label">{{ '::Term' | abpLocalization }}</label>
+          <nz-select class="w-100" nzAllowClear nzShowSearch formControlName="term">
+            <nz-option
+              *ngFor="let t of terms"
+              [nzValue]="t.value"
+              [nzLabel]="'::Enum:Term.' + t.value | abpLocalization"
+            ></nz-option>
+          </nz-select>
+        </div>
+      </div>
+
+      <div class="row mt-3">
+        <div class="col-md-12">
+          <label class="form-label">
+            {{ '::FeeStructure' | abpLocalization }} <span class="text-danger">*</span>
+          </label>
+          <nz-select class="w-100" nzAllowClear nzShowSearch formControlName="feeStructureId">
+            <nz-option
+              *ngFor="let f of feeStructureOptions"
+              [nzValue]="f.id"
+              [nzLabel]="feeStructureLabel(f)"
+            ></nz-option>
+          </nz-select>
+        </div>
+      </div>
+
+      <div class="row mt-3">
+        <div class="col-md-6">
+          <label class="form-label">
+            {{ '::EffectiveFrom' | abpLocalization }} <span class="text-danger">*</span>
+          </label>
+          <input type="date" class="form-control" formControlName="effectiveFrom" />
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label">{{ '::EffectiveTo' | abpLocalization }}</label>
+          <input type="date" class="form-control" formControlName="effectiveTo" />
+        </div>
+      </div>
+
+      <div class="row mt-3">
+        <div class="col-md-6">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="bulk-active" formControlName="isActive" />
+            <label class="form-check-label" for="bulk-active">
+              {{ '::IsActive' | abpLocalization }}
+            </label>
+          </div>
+
+          <div class="form-check mt-2">
+            <input class="form-check-input" type="checkbox" id="bulk-skipdup" formControlName="skipIfSameExists" />
+            <label class="form-check-label" for="bulk-skipdup">
+              {{ '::SkipIfSameExists' | abpLocalization }}
+            </label>
+          </div>
+        </div>
+
+        <div class="col-md-6" *ngIf="bulkResult">
+          <div class="alert alert-info mb-0">
+            <div><b>{{ '::TotalStudents' | abpLocalization }}:</b> {{ bulkResult.totalStudents }}</div>
+            <div><b>{{ '::Created' | abpLocalization }}:</b> {{ bulkResult.created }}</div>
+            <div><b>{{ '::Skipped' | abpLocalization }}:</b> {{ bulkResult.skipped }}</div>
+            <div><b>{{ '::DeactivatedOld' | abpLocalization }}:</b> {{ bulkResult.deactivatedOld }}</div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </ng-template>
+
+  <ng-template #abpFooter>
+    <button type="button" class="btn btn-secondary" (click)="closeBulkAssign()">
+      {{ '::Close' | abpLocalization }}
+    </button>
+
+    <button
+      class="btn btn-primary"
+      [disabled]="!bulkForm || bulkForm.invalid || isBulkSubmitting"
+      (click)="bulkAssign()"
+    >
+      <i class="fas fa-check me-1"></i>
+      {{ '::Assign' | abpLocalization }}
+    </button>
+  </ng-template>
+</abp-modal>
+

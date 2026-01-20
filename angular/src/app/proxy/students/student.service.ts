@@ -39,7 +39,7 @@ export class StudentService {
     this.restService.request<any, PagedResultDto<StudentDto>>({
       method: 'GET',
       url: '/api/app/students',
-      params: { filter: input.filter, admissionNo: input.admissionNo, firstName: input.firstName, lastName: input.lastName, dob: input.dob, gender: input.gender, status: input.status, sorting: input.sorting, skipCount: input.skipCount, maxResultCount: input.maxResultCount },
+      params: { filter: input.filter, admissionNo: input.admissionNo, firstName: input.firstName, lastName: input.lastName, gradeLevel: input.gradeLevel, section: input.section, term: input.term, shift: input.shift, dob: input.dob, gender: input.gender, status: input.status, sorting: input.sorting, skipCount: input.skipCount, maxResultCount: input.maxResultCount },
     },
     { apiName: this.apiName,...config });
   

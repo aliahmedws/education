@@ -16,5 +16,5 @@ public interface IStudentFeeProfileAppService : IApplicationService
     Task UpdateAsync(Guid id, CreateUpdateStudentFeeProfileDto input);
 
     Task DeleteAsync(Guid id);
-
+    Task<BulkAssignStudentFeeProfileResultDto> BulkAssignAsync(BulkAssignStudentFeeProfileDto input);
 }

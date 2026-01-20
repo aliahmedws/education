@@ -2,6 +2,9 @@ using EHub.FeeModule;
 using EHub.FeeModule.FeeHeads;
 using EHub.FeeModule.FeeStructureItems;
 using EHub.FeeModule.FeeStructures;
+using EHub.FeeModule.LateFeePolices;
+using EHub.FeeModule.LateFeePolicies;
+using EHub.FeeModule.StudentFeeDiscounts;
 using EHub.FeeModule.StudentFeeProfiles;
 using EHub.FileAttachments;
 using EHub.StaffAttendances;
@@ -59,6 +62,8 @@ public class EHubDbContext :
     public DbSet<FeeStructure> FeeStructures { get; set; }
     public DbSet<FeeStructureItem> FeeStructureItems { get; set; }
     public DbSet<StudentFeeProfile> StudentFeeProfiles { get; set; }
+    public DbSet<StudentFeeDiscount> StudentFeeDiscounts { get; set; }
+    public DbSet<LateFeePolicy> lateFeePolicies { get; set; }
     #region Entities from the modules
 
     /* Notice: We only implemented IIdentityProDbContext and ISaasDbContext
@@ -594,6 +599,51 @@ public class EHubDbContext :
                 .WithMany()
                 .HasForeignKey(x => x.FeeStructureId)
                 .OnDelete(DeleteBehavior.Restrict);
+        });
+        builder.Entity<StudentFeeDiscount>(b =>
+        {
+            b.ToTable(EHubConsts.DbTablePrefix + "StudentFeeDiscounts", EHubConsts.DbSchema);
+            b.ConfigureByConvention();
+
+            b.Property(x => x.StudentId).IsRequired();
+            b.Property(x => x.FeeHeadId); // nullable
+            b.Property(x => x.DiscountType).IsRequired();
+            b.Property(x => x.Value).IsRequired().HasPrecision(18, 2);
+            b.Property(x => x.StartMonth); // nullable
+            b.Property(x => x.EndMonth); // nullable
+            b.Property(x => x.Reason).IsRequired().HasMaxLength(500);
+            b.Property(x => x.ApprovedByStaffId); // nullable
+            b.Property(x => x.IsActive).IsRequired().HasDefaultValue(true);
+
+            // Foreign Keys
+            b.HasOne(x => x.Student)
+                .WithMany()
+                .HasForeignKey(x => x.StudentId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            b.HasOne(x => x.FeeHead)
+                .WithMany()
+                .HasForeignKey(x => x.FeeHeadId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            b.HasOne(x => x.ApprovedByStaff)
+                .WithMany()
+                .HasForeignKey(x => x.ApprovedByStaffId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+        builder.Entity<LateFeePolicy>(b =>
+        {
+            b.ToTable(EHubConsts.DbTablePrefix + "LateFeePolicies", EHubConsts.DbSchema);
+            b.ConfigureByConvention();
+
+            b.Property(x => x.GradeLevel); // nullable enum
+            b.Property(x => x.Section); // nullable enum
+            b.Property(x => x.Shift); // nullable enum
+            b.Property(x => x.Term); // nullable enum
+            b.Property(x => x.GraceDays).IsRequired();
+            b.Property(x => x.Type).IsRequired();
+            b.Property(x => x.Value).IsRequired().HasPrecision(18, 2);
+            b.Property(x => x.IsActive).IsRequired().HasDefaultValue(true);
         });
     }
 }

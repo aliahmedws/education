@@ -150,7 +150,7 @@ function configureRoutes() {
       layout: eLayoutType.application,
       // requiredPolicy: 'EHub.FeeMenu.FeeStructures', // optional
     },
-     {
+    {
       path: '/fee-structure-items',
       name: '::Menu:FeeStructureItems',
       parentName: '::Menu:Fees',
@@ -159,7 +159,7 @@ function configureRoutes() {
       layout: eLayoutType.application,
       // requiredPolicy: 'EHub.FeeMenu.FeeStructures', // optional
     },
-       {
+    {
       path: '/student-fee-profiles',
       name: '::Menu:StudentFeeProfiles',
       parentName: '::Menu:Fees',
@@ -167,6 +167,15 @@ function configureRoutes() {
       order: 4,
       layout: eLayoutType.application,
       // requiredPolicy: 'EHub.FeeMenu.FeeStructures', // optional
+    },
+    {
+      path: '/student-fee-discounts',
+      name: '::Menu:StudentFeeDiscounts',
+      parentName: '::Menu:Fees',
+      iconClass: 'fas fa-percent',
+      order: 5,
+      layout: eLayoutType.application,
+      // requiredPolicy: 'EHub.StudentFeeDiscounts', // optional
     },
   ]);
 }

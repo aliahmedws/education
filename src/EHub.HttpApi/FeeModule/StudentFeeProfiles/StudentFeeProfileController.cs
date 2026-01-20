@@ -50,4 +50,11 @@ public class StudentFeeProfileController : AbpController, IStudentFeeProfileAppS
     {
         return _appService.DeleteAsync(id);
     }
+
+    [HttpPost("bulk-assign")]
+    public Task<BulkAssignStudentFeeProfileResultDto> BulkAssignAsync(BulkAssignStudentFeeProfileDto input)
+    {
+        return _appService.BulkAssignAsync(input);
+    }
+
 }
