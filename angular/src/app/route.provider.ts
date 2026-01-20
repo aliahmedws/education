@@ -177,5 +177,23 @@ function configureRoutes() {
       layout: eLayoutType.application,
       // requiredPolicy: 'EHub.StudentFeeDiscounts', // optional
     },
+    {
+      path: '/late-fee-polices',
+      name: '::Menu:LateFeePolicies',
+      parentName: '::Menu:Fees',
+      iconClass: 'fas fa-clock',
+      order: 6,
+      layout: eLayoutType.application,
+      // requiredPolicy: 'EHub.LateFeePolicies', // optional
+    },
+    {
+      path: '/student-monthly-fees',
+      name: '::Menu:StudentMonthlyFees',
+      parentName: '::Menu:Fees',
+      iconClass: 'fas fa-calendar-alt',
+      order: 7,
+      layout: eLayoutType.application,
+      // requiredPolicy: 'EHub.StudentMonthlyFees', // optional
+    },
   ]);
 }

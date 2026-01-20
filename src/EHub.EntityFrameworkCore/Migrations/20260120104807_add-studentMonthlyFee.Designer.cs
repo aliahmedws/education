@@ -4,6 +4,7 @@ using EHub.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Volo.Abp.EntityFrameworkCore;
 
@@ -12,9 +13,11 @@ using Volo.Abp.EntityFrameworkCore;
 namespace EHub.Migrations
 {
     [DbContext(typeof(EHubDbContext))]
-    partial class EHubDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260120104807_add-studentMonthlyFee")]
+    partial class addstudentMonthlyFee
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -492,100 +495,6 @@ namespace EHub.Migrations
                     b.HasIndex("StudentId");
 
                     b.ToTable("AppStudentFeeProfiles", (string)null);
-                });
-
-            modelBuilder.Entity("EHub.FeeModule.StudentMonthlyFeeLines.StudentMonthlyFeeLine", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal>("AdjustmentAmount")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .IsRequired()
-                        .HasMaxLength(40)
-                        .HasColumnType("nvarchar(40)")
-                        .HasColumnName("ConcurrencyStamp");
-
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("CreationTime");
-
-                    b.Property<Guid?>("CreatorId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("CreatorId");
-
-                    b.Property<Guid?>("DeleterId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("DeleterId");
-
-                    b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("DeletionTime");
-
-                    b.Property<decimal>("DiscountAmount")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("ExpectedAmount")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("ExtraProperties")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("ExtraProperties");
-
-                    b.Property<Guid>("FeeHeadId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false)
-                        .HasColumnName("IsDeleted");
-
-                    b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("LastModificationTime");
-
-                    b.Property<Guid?>("LastModifierId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("LastModifierId");
-
-                    b.Property<decimal>("LateFeeAmount")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("NetAmount")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("OutstandingAmount")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("PaidAmount")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<Guid>("StudentMonthlyFeeId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("TenantId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("TenantId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("FeeHeadId");
-
-                    b.HasIndex("StudentMonthlyFeeId");
-
-                    b.ToTable("AppStudentMonthlyFeeLines", (string)null);
                 });
 
             modelBuilder.Entity("EHub.FeeModule.StudentMonthlyFees.StudentMonthlyFee", b =>
@@ -3387,25 +3296,6 @@ namespace EHub.Migrations
                     b.Navigation("FeeStructure");
 
                     b.Navigation("Student");
-                });
-
-            modelBuilder.Entity("EHub.FeeModule.StudentMonthlyFeeLines.StudentMonthlyFeeLine", b =>
-                {
-                    b.HasOne("EHub.FeeModule.FeeHeads.FeeHead", "FeeHead")
-                        .WithMany()
-                        .HasForeignKey("FeeHeadId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("EHub.FeeModule.StudentMonthlyFees.StudentMonthlyFee", "StudentMonthlyFee")
-                        .WithMany()
-                        .HasForeignKey("StudentMonthlyFeeId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("FeeHead");
-
-                    b.Navigation("StudentMonthlyFee");
                 });
 
             modelBuilder.Entity("EHub.FeeModule.StudentMonthlyFees.StudentMonthlyFee", b =>

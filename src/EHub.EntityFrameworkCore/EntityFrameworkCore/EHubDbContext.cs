@@ -2,10 +2,11 @@ using EHub.FeeModule;
 using EHub.FeeModule.FeeHeads;
 using EHub.FeeModule.FeeStructureItems;
 using EHub.FeeModule.FeeStructures;
-using EHub.FeeModule.LateFeePolices;
 using EHub.FeeModule.LateFeePolicies;
 using EHub.FeeModule.StudentFeeDiscounts;
 using EHub.FeeModule.StudentFeeProfiles;
+using EHub.FeeModule.StudentMonthlyFeeLines;
+using EHub.FeeModule.StudentMonthlyFees;
 using EHub.FileAttachments;
 using EHub.StaffAttendances;
 using EHub.StaffDocuments;
@@ -64,6 +65,8 @@ public class EHubDbContext :
     public DbSet<StudentFeeProfile> StudentFeeProfiles { get; set; }
     public DbSet<StudentFeeDiscount> StudentFeeDiscounts { get; set; }
     public DbSet<LateFeePolicy> lateFeePolicies { get; set; }
+    public DbSet<StudentMonthlyFee> StudentMonthlyFees { get; set; }
+    public DbSet<StudentMonthlyFeeLine> StudentMonthlyFeeLines { get; set; }
     #region Entities from the modules
 
     /* Notice: We only implemented IIdentityProDbContext and ISaasDbContext
@@ -644,6 +647,49 @@ public class EHubDbContext :
             b.Property(x => x.Type).IsRequired();
             b.Property(x => x.Value).IsRequired().HasPrecision(18, 2);
             b.Property(x => x.IsActive).IsRequired().HasDefaultValue(true);
+        });
+        builder.Entity<StudentMonthlyFee>(b =>
+        {
+            b.ToTable(EHubConsts.DbTablePrefix + "StudentMonthlyFees", EHubConsts.DbSchema);
+            b.ConfigureByConvention();
+
+            b.Property(x => x.StudentId).IsRequired();
+            b.Property(x => x.Month).IsRequired();
+            b.Property(x => x.DueDate);
+            b.Property(x => x.Remarks).HasMaxLength(1024);
+
+            b.HasOne(x => x.Student)
+                .WithMany()
+                .HasForeignKey(x => x.StudentId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+        builder.Entity<StudentMonthlyFeeLine>(b =>
+        {
+            b.ToTable(EHubConsts.DbTablePrefix + "StudentMonthlyFeeLines", EHubConsts.DbSchema);
+            b.ConfigureByConvention();
+
+            b.Property(x => x.StudentMonthlyFeeId).IsRequired();
+            b.Property(x => x.FeeHeadId).IsRequired();
+
+            b.Property(x => x.ExpectedAmount).HasPrecision(18, 2);
+            b.Property(x => x.DiscountAmount).HasPrecision(18, 2);
+            b.Property(x => x.AdjustmentAmount).HasPrecision(18, 2);
+            b.Property(x => x.LateFeeAmount).HasPrecision(18, 2);
+            b.Property(x => x.PaidAmount).HasPrecision(18, 2);
+
+            b.Property(x => x.NetAmount).HasPrecision(18, 2);
+            b.Property(x => x.OutstandingAmount).HasPrecision(18, 2);
+
+
+            b.HasOne(x => x.StudentMonthlyFee)
+                .WithMany() // or .WithMany(x => x.Lines) if you add navigation on StudentMonthlyFee
+                .HasForeignKey(x => x.StudentMonthlyFeeId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            b.HasOne(x => x.FeeHead)
+                .WithMany()
+                .HasForeignKey(x => x.FeeHeadId)
+                .OnDelete(DeleteBehavior.NoAction);
         });
     }
 }

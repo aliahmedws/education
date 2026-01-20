@@ -2,10 +2,11 @@ using AutoMapper;
 using EHub.FeeModule.FeeHeads;
 using EHub.FeeModule.FeeStructureItems;
 using EHub.FeeModule.FeeStructures;
-using EHub.FeeModule.LateFeePolices;
 using EHub.FeeModule.LateFeePolicies;
 using EHub.FeeModule.StudentFeeDiscounts;
 using EHub.FeeModule.StudentFeeProfiles;
+using EHub.FeeModule.StudentMonthlyFeeLines;
+using EHub.FeeModule.StudentMonthlyFees;
 using EHub.FileAttachments;
 using EHub.StaffAttendances;
 using EHub.StaffDocuments;
@@ -62,5 +63,14 @@ public class EHubApplicationAutoMapperProfile : Profile
                !src.Section.HasValue &&
                !src.Shift.HasValue &&
                !src.Term.HasValue));
+
+        CreateMap<StudentMonthlyFee, StudentMonthlyFeeDto>()
+            .ForMember(d => d.StudentName, opt => opt.MapFrom(src =>
+                src.Student != null ? $"{src.Student.FirstName} {src.Student.LastName}" : null))
+            .ForMember(d => d.AdmissionNo, opt => opt.MapFrom(src =>
+                src.Student != null ? src.Student.AdmissionNo : null));
+
+        CreateMap<StudentMonthlyFeeLine, StudentMonthlyFeeLineDto>()
+            .ForMember(d => d.FeeHeadName, opt => opt.MapFrom(src => src.FeeHead != null ? src.FeeHead.Name : null));
     }
 }

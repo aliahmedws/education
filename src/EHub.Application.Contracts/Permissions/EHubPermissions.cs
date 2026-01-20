@@ -75,4 +75,20 @@ public static class EHubPermissions
         public const string Edit = Default + ".Edit";
         public const string Delete = Default + ".Delete";
     }
+
+    public static class LateFeePolicies
+    {
+        public const string Default = GroupName + ".LateFeePolicies";
+        public const string Create = Default + ".Create";
+        public const string Edit = Default + ".Edit";
+        public const string Delete = Default + ".Delete";
+    }
+
+    public static class StudentMonthlyFees
+    {
+        public const string Default = GroupName + ".StudentMonthlyFees";
+        public const string Create = Default + ".Create";
+        public const string Edit = Default + ".Edit";
+        public const string Delete = Default + ".Delete";
+    }
 }
