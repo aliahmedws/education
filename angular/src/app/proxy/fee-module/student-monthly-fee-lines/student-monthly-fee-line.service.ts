@@ -1,4 +1,4 @@
-import type { BulkGenerateStudentMonthlyFeeResultDto, CalculateFeeLineAmountsInput, CalculatedAmountsDto, CreateUpdateStudentMonthlyFeeLineDto, GetStudentMonthlyFeeLineListInput, StudentMonthlyFeeLineDto } from './models';
+import type { BulkGenerateStudentMonthlyFeeResultDto, CalculateFeeLineAmountsInput, CalculatedAmountsDto, CheckFeesDashboardDto, CheckFeesDashboardInput, CreateUpdateStudentMonthlyFeeLineDto, GetStudentMonthlyFeeLineListInput, StudentMonthlyFeeLineDto } from './models';
 import { RestService, Rest } from '@abp/ng.core';
 import type { PagedResultDto } from '@abp/ng.core';
 import { Injectable } from '@angular/core';
@@ -50,6 +50,15 @@ export class StudentMonthlyFeeLineService {
     this.restService.request<any, StudentMonthlyFeeLineDto>({
       method: 'GET',
       url: `/api/fee-module/student-monthly-fee-lines/${id}`,
+    },
+    { apiName: this.apiName,...config });
+  
+
+  getDashboard = (input: CheckFeesDashboardInput, config?: Partial<Rest.Config>) =>
+    this.restService.request<any, CheckFeesDashboardDto>({
+      method: 'POST',
+      url: '/api/fee-module/student-monthly-fee-lines/get-dashboard',
+      body: input,
     },
     { apiName: this.apiName,...config });
   

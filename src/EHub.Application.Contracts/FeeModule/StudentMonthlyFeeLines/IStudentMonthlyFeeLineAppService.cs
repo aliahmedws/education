@@ -20,4 +20,5 @@ public interface IStudentMonthlyFeeLineAppService : IApplicationService
     Task<BulkGenerateStudentMonthlyFeeResultDto> BulkGenerateAsync(BulkGenerateStudentMonthlyFeeDto input);
 
     Task<CalculatedAmountsDto> CalculateAmountsAsync(CalculateFeeLineAmountsInput input);
+    Task<CheckFeesDashboardDto> GetDashboardAsync(CheckFeesDashboardInput input);
 }

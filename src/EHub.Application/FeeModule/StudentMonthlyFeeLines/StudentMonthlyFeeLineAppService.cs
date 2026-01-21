@@ -1,4 +1,5 @@
-﻿using EHub.FeeModule.FeeStructureItems;
+﻿using EHub.FeeModule.FeeHeads;
+using EHub.FeeModule.FeeStructureItems;
 using EHub.FeeModule.LateFeePolicies;
 using EHub.FeeModule.StudentFeeDiscounts;
 using EHub.FeeModule.StudentFeeProfiles;
@@ -11,6 +12,7 @@ using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Repositories;
+using Volo.Abp.Linq;
 
 namespace EHub.FeeModule.StudentMonthlyFeeLines;
 
@@ -25,7 +27,9 @@ public class StudentMonthlyFeeLineAppService : ApplicationService, IStudentMonth
     private readonly IStudentMonthlyFeeRepository _monthlyFeeRepo;
     private readonly IStudentFeeDiscountRepository _discountRepo;
     private readonly ILateFeePolicyRepository _lateFeePolicyRepo;
+    IRepository<FeeHead, Guid> _feeHeadRepo;
     IRepository<FeeStructureItem, Guid> _feeStructureItemRepo;
+    IAsyncQueryableExecuter _asyncExecuter;
 
     public StudentMonthlyFeeLineAppService(
         IStudentMonthlyFeeLineRepository repo,
@@ -36,7 +40,9 @@ public class StudentMonthlyFeeLineAppService : ApplicationService, IStudentMonth
         IStudentMonthlyFeeRepository monthlyFeeRepo,
         IStudentFeeDiscountRepository discountRepo,
         ILateFeePolicyRepository lateFeePolicyRepo,
-        IRepository<FeeStructureItem, Guid> feeStructureItemRepo)
+        IRepository<FeeHead, Guid> feeHeadRepo,
+        IRepository<FeeStructureItem, Guid> feeStructureItemRepo,
+          IAsyncQueryableExecuter asyncExecuter)
     {
         _repo = repo;
         _studentRepo = studentRepo;
@@ -46,7 +52,9 @@ public class StudentMonthlyFeeLineAppService : ApplicationService, IStudentMonth
         _monthlyFeeRepo = monthlyFeeRepo;
         _discountRepo = discountRepo;
         _lateFeePolicyRepo = lateFeePolicyRepo;
+        _feeHeadRepo = feeHeadRepo;
         _feeStructureItemRepo = feeStructureItemRepo;
+        _asyncExecuter = asyncExecuter;
     }
 
     public async Task<StudentMonthlyFeeLineDto> GetAsync(Guid id)
@@ -262,6 +270,115 @@ public class StudentMonthlyFeeLineAppService : ApplicationService, IStudentMonth
         }
 
         await CurrentUnitOfWork!.SaveChangesAsync();
+        return result;
+    }
+
+    public async Task<CheckFeesDashboardDto> GetDashboardAsync(CheckFeesDashboardInput input)
+    {
+        if (input.Month == default)
+            throw new UserFriendlyException("Month is required.");
+
+        // Normalize to month start
+        var monthStart = new DateTime(input.Month.Year, input.Month.Month, 1);
+        var monthEnd = monthStart.AddMonths(1);
+
+        // 1) Students query
+        var studentsQ = await _studentRepo.GetQueryableAsync();
+
+        studentsQ = studentsQ
+            .WhereIf(input.StudentId.HasValue, x => x.Id == input.StudentId!.Value)
+            .WhereIf(input.GradeLevel.HasValue, x => (int?)x.GradeLevel == input.GradeLevel)
+            .WhereIf(input.Section.HasValue, x => (int?)x.Section == input.Section)
+            .WhereIf(input.Shift.HasValue, x => (int?)x.Shift == input.Shift)
+            .WhereIf(input.Term.HasValue, x => (int?)x.Term == input.Term);
+
+        var studentIdsQ = studentsQ.Select(x => x.Id);
+
+        // 2) Monthly fees for the selected month (RANGE filter, not equality)
+        var monthlyFeesQ = await _monthlyFeeRepo.GetQueryableAsync();
+        monthlyFeesQ = monthlyFeesQ
+            .Where(x =>
+                x.Month >= monthStart &&
+                x.Month < monthEnd &&
+                studentIdsQ.Contains(x.StudentId));
+
+        // 3) Lines + FeeHead join
+        var linesQ = await _repo.GetQueryableAsync();
+
+        // If you have FeeHead entity repo:
+        var feeHeadsQ = await _feeHeadRepo.GetQueryableAsync(); // IRepository<FeeHead, Guid>
+
+        var query =
+            from mf in monthlyFeesQ
+            join s in studentsQ on mf.StudentId equals s.Id
+            join line in linesQ on mf.Id equals line.StudentMonthlyFeeId
+            join fh0 in feeHeadsQ on line.FeeHeadId equals fh0.Id into fhs
+            from fh in fhs.DefaultIfEmpty()
+            select new
+            {
+                StudentId = s.Id,
+                StudentName = ((s.FirstName ?? "") + " " + (s.LastName ?? "")).Trim(),
+                line.FeeHeadId,
+                FeeHeadName = fh != null ? (fh.Name ?? "") : "",
+
+                Expected = line.ExpectedAmount,
+                Discount = line.DiscountAmount,
+                LateFee = line.LateFeeAmount,
+
+                Net = (line.ExpectedAmount - line.DiscountAmount + line.LateFeeAmount),
+                Paid = line.PaidAmount
+            };
+
+        var rows = await AsyncExecuter.ToListAsync(query);
+
+        var result = new CheckFeesDashboardDto
+        {
+            Month = monthStart,
+            TotalStudents = rows.Select(x => x.StudentId).Distinct().Count()
+        };
+
+        result.TotalExpected = rows.Sum(x => x.Expected);
+        result.TotalDiscount = rows.Sum(x => x.Discount);
+        result.TotalLateFee = rows.Sum(x => x.LateFee);
+
+        result.TotalNet = rows.Sum(x => x.Net);
+        result.TotalPaid = rows.Sum(x => x.Paid);
+        result.TotalPending = result.TotalNet - result.TotalPaid;
+
+        // FeeHead summary
+        result.ByFeeHead = rows
+            .GroupBy(x => new { x.FeeHeadId, x.FeeHeadName })
+            .Select(g => new FeeHeadSummaryDto
+            {
+                FeeHeadId = g.Key.FeeHeadId,
+                FeeHeadName = string.IsNullOrWhiteSpace(g.Key.FeeHeadName) ? "—" : g.Key.FeeHeadName,
+
+                Expected = g.Sum(x => x.Expected),
+                Discount = g.Sum(x => x.Discount),
+                LateFee = g.Sum(x => x.LateFee),
+
+                Net = g.Sum(x => x.Net),
+                Paid = g.Sum(x => x.Paid),
+                Pending = g.Sum(x => x.Net) - g.Sum(x => x.Paid),
+            })
+            .OrderByDescending(x => x.Pending)
+            .ToList();
+
+        // Student summary (top 20 pending)
+        result.ByStudent = rows
+            .GroupBy(x => new { x.StudentId, x.StudentName })
+            .Select(g => new StudentFeeSummaryDto
+            {
+                StudentId = g.Key.StudentId,
+                StudentName = string.IsNullOrWhiteSpace(g.Key.StudentName) ? "—" : g.Key.StudentName,
+                Net = g.Sum(x => x.Net),
+                Paid = g.Sum(x => x.Paid),
+                Pending = g.Sum(x => x.Net) - g.Sum(x => x.Paid),
+            })
+            .OrderByDescending(x => x.Pending)
+            .Take(20)
+            .ToList();
+
         return result;
     }
 }

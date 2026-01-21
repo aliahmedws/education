@@ -1,0 +1,156 @@
+<abp-page [title]="'::Menu:CheckFees' | abpLocalization">
+
+  <!-- Filters -->
+  <div class="card">
+    <div class="card-body">
+      <form [formGroup]="form" class="row g-3 align-items-end">
+
+        <div class="col-12 col-md-3">
+          <label class="form-label">{{ '::Month' | abpLocalization }}</label>
+          <input type="month" class="form-control" formControlName="month" />
+        </div>
+
+        <div class="col-6 col-md-2">
+          <label class="form-label">{{ '::GradeLevel' | abpLocalization }}</label>
+          <input type="number" class="form-control" formControlName="gradeLevel" />
+        </div>
+
+        <div class="col-6 col-md-2">
+          <label class="form-label">{{ '::Section' | abpLocalization }}</label>
+          <input type="number" class="form-control" formControlName="section" />
+        </div>
+
+        <div class="col-6 col-md-2">
+          <label class="form-label">{{ '::Shift' | abpLocalization }}</label>
+          <input type="number" class="form-control" formControlName="shift" />
+        </div>
+
+        <div class="col-6 col-md-2">
+          <label class="form-label">{{ '::Term' | abpLocalization }}</label>
+          <input type="number" class="form-control" formControlName="term" />
+        </div>
+
+        <div class="col-12 col-md-auto d-flex gap-2">
+          <button type="button" class="btn btn-outline-primary" (click)="clear()">
+            {{ '::Reset' | abpLocalization }}
+          </button>
+
+          <button type="button" class="btn btn-primary" (click)="search()" [disabled]="loading">
+            <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+            {{ '::Apply' | abpLocalization }}
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <!-- Summary -->
+  <div class="row g-3 mt-3" *ngIf="data">
+    <div class="col-12 col-md-2" *ngFor="let c of [
+      { title: 'Net', value: data.totalNet },
+      { title: 'Collected', value: data.totalPaid },
+      { title: 'Pending', value: data.totalPending },
+      { title: 'Discount', value: data.totalDiscount },
+      { title: 'Late Fee', value: data.totalLateFee },
+      { title: 'Students', value: data.totalStudents }
+    ]">
+      <div class="kpi card">
+        <div class="card-body">
+          <div class="kpi-title">{{ c.title }}</div>
+          <div class="kpi-value">{{ c.value | number:'1.0-0' }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Charts -->
+  <div class="row g-3 mt-3">
+    <div class="col-12 col-lg-8">
+      <div class="card">
+        <div class="card-header fw-semibold">
+          Top Fee Heads (Net/Paid/Pending)
+        </div>
+        <div class="card-body chart-box">
+          <canvas #feeHeadBarCanvas></canvas>
+          <div class="empty-hint" *ngIf="!data || !(data.byFeeHead?.length)">
+            No fee head data for this selection.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-4">
+      <div class="card">
+        <div class="card-header fw-semibold">
+          Collected vs Pending
+        </div>
+        <div class="card-body chart-box">
+          <canvas #collectionDoughnutCanvas></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tables -->
+  <div class="row g-3 mt-3" *ngIf="data">
+
+    <div class="col-12 col-lg-7">
+      <div class="card">
+        <div class="card-header fw-semibold">
+          Fee Heads Summary
+        </div>
+
+        <div class="card-body table-responsive">
+          <table class="table table-sm align-middle">
+            <thead>
+              <tr>
+                <th>Fee Head</th>
+                <th class="text-end">Net</th>
+                <th class="text-end">Paid</th>
+                <th class="text-end">Pending</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let x of data.byFeeHead">
+                <td class="fw-semibold">{{ x.feeHeadName || '—' }}</td>
+                <td class="text-end">{{ x.net | number:'1.0-0' }}</td>
+                <td class="text-end">{{ x.paid | number:'1.0-0' }}</td>
+                <td class="text-end fw-bold text-danger">{{ x.pending | number:'1.0-0' }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-5">
+      <div class="card">
+        <div class="card-header fw-semibold">
+          Top Pending Students (Top 20)
+        </div>
+
+        <div class="card-body table-responsive">
+          <table class="table table-sm align-middle">
+            <thead>
+              <tr>
+                <th>Student</th>
+                <th class="text-end">Pending</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let s of data.byStudent">
+                <td class="fw-semibold">{{ s.studentName || '—' }}</td>
+                <td class="text-end fw-bold text-danger">{{ s.pending | number:'1.0-0' }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+</abp-page>

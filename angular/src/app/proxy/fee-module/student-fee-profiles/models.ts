@@ -36,6 +36,8 @@ export interface GetStudentFeeProfileListInput extends PagedAndSortedResultReque
   studentId?: string;
   feeStructureId?: string;
   isActive?: boolean;
+  effectiveFrom?: string;
+  effectiveTo?: string;
 }
 
 export interface StudentFeeProfileDto extends FullAuditedEntityDto<string> {

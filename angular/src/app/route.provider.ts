@@ -166,7 +166,7 @@ function configureRoutes() {
       iconClass: 'fas fa-layer-group',
       order: 4,
       layout: eLayoutType.application,
-      // requiredPolicy: 'EHub.FeeMenu.FeeStructures', // optional
+      // requiredPolicy: 'EHub.StudentFeeProfiles ', // optional
     },
     {
       path: '/student-fee-discounts',
@@ -203,6 +203,15 @@ function configureRoutes() {
       order: 8,
       layout: eLayoutType.application,
       // requiredPolicy: 'EHub.StudentMonthlyFeeLines',
+    },
+    {
+      path: '/check-fees-dashboard',
+      name: '::Menu:CheckFees',
+      parentName: '::Menu:Fees', // or '::Menu:Administration' if you want
+      layout: eLayoutType.application,
+      // requiredPolicy: 'EHub.Fees.CheckFees', // set your permission OR remove if not needed
+      order: 10,
+      iconClass: 'fas fa-receipt',
     },
   ]);
 }

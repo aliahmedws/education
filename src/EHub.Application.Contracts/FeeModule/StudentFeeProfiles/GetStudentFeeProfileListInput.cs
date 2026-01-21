@@ -9,4 +9,6 @@ public class GetStudentFeeProfileListInput : PagedAndSortedResultRequestDto
     public Guid? StudentId { get; set; }
     public Guid? FeeStructureId { get; set; }
     public bool? IsActive { get; set; }
+    public DateTime? EffectiveFrom { get; set; }
+    public DateTime? EffectiveTo { get; set; }
 }

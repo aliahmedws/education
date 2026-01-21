@@ -53,4 +53,10 @@ public class StudentMonthlyFeeLineController : AbpController, IStudentMonthlyFee
     {
         return _appService.CalculateAmountsAsync(input);
     }
+
+    [HttpPost("get-dashboard")]
+    public Task<CheckFeesDashboardDto> GetDashboardAsync(CheckFeesDashboardInput input)
+    {
+        return _appService.GetDashboardAsync(input);
+    }
 }

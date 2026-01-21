@@ -40,9 +40,11 @@ public class EfCoreStudentFeeProfileRepository
         string? filter,
         Guid? studentId,
         Guid? feeStructureId,
-        bool? isActive)
+        bool? isActive,
+        DateTime? effectiveFrom,
+        DateTime? effectiveTo)
     {
-        var data = await GetFiltersAsync(filter, studentId, feeStructureId, isActive);
+        var data = await GetFiltersAsync(filter, studentId, feeStructureId, isActive, effectiveFrom, effectiveTo);
         return await data.LongCountAsync();
     }
 
@@ -53,9 +55,11 @@ public class EfCoreStudentFeeProfileRepository
         string? filter,
         Guid? studentId,
         Guid? feeStructureId,
-        bool? isActive)
+        bool? isActive,
+        DateTime? effectiveFrom,
+        DateTime? effectiveTo)
     {
-        var data = await GetFiltersAsync(filter, studentId, feeStructureId, isActive);
+        var data = await GetFiltersAsync(filter, studentId, feeStructureId, isActive, effectiveFrom, effectiveTo);
 
         return await data
             .OrderBy(sorting)
@@ -67,7 +71,9 @@ public class EfCoreStudentFeeProfileRepository
         string? filter,
         Guid? studentId,
         Guid? feeStructureId,
-        bool? isActive)
+        bool? isActive,
+        DateTime? effectiveFrom,
+        DateTime? effectiveTo)
     {
         var queryable = await GetQueryableAsync();
 
@@ -77,7 +83,10 @@ public class EfCoreStudentFeeProfileRepository
                   || x.FeeStructureId.ToString().Contains(filter!))
             .WhereIf(studentId.HasValue, x => x.StudentId == studentId)
             .WhereIf(feeStructureId.HasValue, x => x.FeeStructureId == feeStructureId)
-            .WhereIf(isActive.HasValue, x => x.IsActive == isActive);
+            .WhereIf(isActive.HasValue, x => x.IsActive == isActive)
+            .WhereIf(effectiveFrom.HasValue, x => x.EffectiveFrom >= effectiveFrom!.Value)
+            .WhereIf(effectiveTo.HasValue, x => x.EffectiveFrom <= effectiveTo!.Value)
+        ;
 
         return query;
     }

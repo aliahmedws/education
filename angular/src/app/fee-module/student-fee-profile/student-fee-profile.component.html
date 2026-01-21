@@ -182,7 +182,7 @@
 </abp-page>
 
 <!-- Create/Edit Modal -->
-<abp-modal [(visible)]="isModalOpen">
+<abp-modal [(visible)]="isModalOpen" [options]="{ size : 'lg'}">
   <ng-template #abpHeader>
     <h3>
       {{ (selected.id ? '::EditStudentFeeProfile' : '::NewStudentFeeProfile') | abpLocalization }}
@@ -192,7 +192,7 @@
   <ng-template #abpBody>
     <form [formGroup]="form" (ngSubmit)="save()">
       <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-5">
           <label class="form-label">
             {{ '::Student' | abpLocalization }} <span class="text-danger">*</span>
           </label>
@@ -206,7 +206,7 @@
           </nz-select>
         </div>
 
-        <div class="col-md-6">
+        <div class="col-md-7">
           <label class="form-label">
             {{ '::FeeStructure' | abpLocalization }} <span class="text-danger">*</span>
           </label>
@@ -257,7 +257,7 @@
 </abp-modal>
 
 <!-- Bulk Assign Modal -->
-<abp-modal [(visible)]="isBulkModalOpen">
+<abp-modal [(visible)]="isBulkModalOpen" [options]="{ size : 'lg'}">
   <ng-template #abpHeader>
     <h3>{{ '::BulkAssignStudentFeeProfiles' | abpLocalization }}</h3>
   </ng-template>

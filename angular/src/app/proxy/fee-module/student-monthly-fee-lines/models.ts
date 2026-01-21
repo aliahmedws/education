@@ -21,6 +21,28 @@ export interface CalculatedAmountsDto {
   netAmount: number;
 }
 
+export interface CheckFeesDashboardDto {
+  month?: string;
+  totalExpected: number;
+  totalDiscount: number;
+  totalLateFee: number;
+  totalNet: number;
+  totalPaid: number;
+  totalPending: number;
+  byFeeHead: FeeHeadSummaryDto[];
+  byStudent: StudentFeeSummaryDto[];
+  totalStudents: number;
+}
+
+export interface CheckFeesDashboardInput extends PagedAndSortedResultRequestDto {
+  month?: string;
+  gradeLevel?: number;
+  section?: number;
+  shift?: number;
+  term?: number;
+  studentId?: string;
+}
+
 export interface CreateUpdateStudentMonthlyFeeLineDto {
   studentMonthlyFeeId: string;
   feeHeadId: string;
@@ -31,9 +53,28 @@ export interface CreateUpdateStudentMonthlyFeeLineDto {
   paidAmount: number;
 }
 
+export interface FeeHeadSummaryDto {
+  feeHeadId?: string;
+  feeHeadName?: string;
+  expected: number;
+  discount: number;
+  lateFee: number;
+  net: number;
+  paid: number;
+  pending: number;
+}
+
 export interface GetStudentMonthlyFeeLineListInput extends PagedAndSortedResultRequestDto {
   studentMonthlyFeeId?: string;
   feeHeadId?: string;
+}
+
+export interface StudentFeeSummaryDto {
+  studentId?: string;
+  studentName?: string;
+  net: number;
+  paid: number;
+  pending: number;
 }
 
 export interface StudentMonthlyFeeLineDto extends EntityDto<string> {

@@ -115,6 +115,8 @@ discounts = { items: [], totalCount: 0 } as PagedResultDto<StudentFeeDiscountDto
   save(): void {
     if (this.form.invalid) return;
 
+    this.form.value.discountType = DiscountType.Percent;
+
     const input = this.form.value as CreateUpdateStudentFeeDiscountDto;
 
     if (this.selected.id) {
@@ -151,8 +153,7 @@ discounts = { items: [], totalCount: 0 } as PagedResultDto<StudentFeeDiscountDto
       studentId: [this.selected.studentId || null, Validators.required],
       feeHeadId: [this.selected.feeHeadId || null], // nullable - applies to total if null
       discountType: [
-        this.selected.id ? this.selected.discountType : DiscountType.Fixed,
-        Validators.required
+       { value: DiscountType.Percent, disabled: true }, [Validators.required]
       ],
       value: [this.selected.value || 0, [Validators.required, Validators.min(0)]],
       startMonth: [this.selected.startMonth || null],
@@ -221,10 +222,7 @@ discounts = { items: [], totalCount: 0 } as PagedResultDto<StudentFeeDiscountDto
       term: [this.selectedBulk.term || null],
 
       feeHeadId: [this.selectedBulk.feeHeadId || null], // nullable
-      discountType: [
-        this.selectedBulk.discountType ?? DiscountType.Fixed,
-        Validators.required
-      ],
+      discountType: [{ value: DiscountType.Percent, disabled: true }],
       value: [this.selectedBulk.value || 0, [Validators.required, Validators.min(0)]],
 
       startMonth: [this.selectedBulk.startMonth || null],
@@ -261,7 +259,7 @@ discounts = { items: [], totalCount: 0 } as PagedResultDto<StudentFeeDiscountDto
       term: v.term,
 
       feeHeadId: v.feeHeadId,
-      discountType: v.discountType,
+      discountType: DiscountType.Percent,
       value: v.value,
 
       startMonth: v.startMonth,

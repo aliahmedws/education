@@ -48,7 +48,7 @@ export class StudentFeeProfileService {
     this.restService.request<any, PagedResultDto<StudentFeeProfileDto>>({
       method: 'GET',
       url: '/api/fee-module/student-fee-profiles',
-      params: { filter: input.filter, studentId: input.studentId, feeStructureId: input.feeStructureId, isActive: input.isActive, sorting: input.sorting, skipCount: input.skipCount, maxResultCount: input.maxResultCount },
+      params: { filter: input.filter, studentId: input.studentId, feeStructureId: input.feeStructureId, isActive: input.isActive, effectiveFrom: input.effectiveFrom, effectiveTo: input.effectiveTo, sorting: input.sorting, skipCount: input.skipCount, maxResultCount: input.maxResultCount },
     },
     { apiName: this.apiName,...config });
   

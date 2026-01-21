@@ -43,7 +43,9 @@ public class StudentFeeProfileAppService : ApplicationService, IStudentFeeProfil
             input.Filter,
             input.StudentId,
             input.FeeStructureId,
-            input.IsActive
+            input.IsActive,
+            input.EffectiveFrom,
+            input.EffectiveTo
         );
 
         var list = await _repo.GetListAsync(
@@ -53,7 +55,9 @@ public class StudentFeeProfileAppService : ApplicationService, IStudentFeeProfil
             input.Filter,
             input.StudentId,
             input.FeeStructureId,
-            input.IsActive
+            input.IsActive,
+            input.EffectiveFrom,
+            input.EffectiveTo
         );
 
         var items = list.Select(x => ObjectMapper.Map<StudentFeeProfile, StudentFeeProfileDto>(x)).ToList();

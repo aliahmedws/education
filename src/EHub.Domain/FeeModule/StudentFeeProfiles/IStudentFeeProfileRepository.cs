@@ -14,7 +14,9 @@ public interface IStudentFeeProfileRepository : IRepository<StudentFeeProfile, G
         string? filter,
         Guid? studentId,
         Guid? feeStructureId,
-        bool? isActive
+        bool? isActive,
+        DateTime? effectiveFrom,
+        DateTime? effectiveTo
     );
 
     Task<List<StudentFeeProfile>> GetListAsync(
@@ -24,7 +26,10 @@ public interface IStudentFeeProfileRepository : IRepository<StudentFeeProfile, G
         string? filter,
         Guid? studentId,
         Guid? feeStructureId,
-        bool? isActive
+        bool? isActive,
+        DateTime? effectiveFrom,
+        DateTime? effectiveTo
+
     );
 
     Task<List<StudentFeeProfile>> GetActiveProfilesByStudentAsync(Guid studentId, Guid? exceptId = null);

@@ -1,0 +1,61 @@
+/* Layout polish */
+.filter-card {
+  border-radius: 12px;
+}
+
+.section-title {
+  font-weight: 700;
+  font-size: 0.95rem;
+  margin-bottom: 0.75rem;
+}
+
+/* Summary cards */
+.stat-card {
+  border-radius: 12px;
+  height: 100%;
+}
+
+.stat-label {
+  font-size: 0.75rem;
+  color: #6c757d;
+  letter-spacing: 0.02em;
+}
+
+.stat-value {
+  font-size: 1.15rem;
+  font-weight: 800;
+  margin-top: 0.15rem;
+}
+
+/* Charts */
+.chart-box {
+  min-height: 280px;
+  position: relative;
+}
+
+.chart-box canvas {
+  display: block;
+  width: 100% !important;
+  height: 280px !important; /* fixed height for stable rendering */
+}
+
+/* Tables */
+.fee-table th,
+.fee-table td,
+.student-table th,
+.student-table td {
+  vertical-align: middle;
+}
+
+.text-truncate {
+  max-width: 320px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.empty-hint {
+  font-size: 0.85rem;
+  color: #6c757d;
+  margin-top: 0.75rem;
+}

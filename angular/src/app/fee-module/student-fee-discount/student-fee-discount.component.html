@@ -175,7 +175,7 @@
 
         <ngx-datatable-column [name]="'::Value' | abpLocalization" [maxWidth]="100">
           <ng-template let-row="row" ngx-datatable-cell-template>
-            {{ row.value }}{{ row.discountType === 1 ? '%' : '' }}
+            {{ row.value }}{{ row.discountType === 2 ? '%' : '' }}
           </ng-template>
         </ngx-datatable-column>
 
@@ -276,10 +276,10 @@
             class="form-control form-control-sm"
             formControlName="value"
             min="0"
-            [max]="form.get('discountType')?.value === 1 ? 100 : null"
+            [max]="form.get('discountType')?.value === 2 ? 100 : null"
             step="0.01"
           />
-          <small class="text-muted" *ngIf="form.get('discountType')?.value === 1">
+          <small class="text-muted" *ngIf="form.get('discountType')?.value === 2">
             {{ '::MaximumPercentage' | abpLocalization }}: 100%
           </small>
         </div>
@@ -465,9 +465,12 @@
             class="form-control form-control-sm"
             formControlName="value"
             min="0"
-            [max]="bulkForm.get('discountType')?.value === 1 ? 100 : null"
+            [max]="bulkForm.get('discountType')?.value === 2 ? 100 : null"
             step="0.01"
           />
+             <small class="text-muted">
+            {{ '::MaximumPercentage' | abpLocalization }}: 100%
+          </small>
         </div>
       </div>
 

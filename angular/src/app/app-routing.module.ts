@@ -45,6 +45,7 @@ const routes: Routes = [
   { path: 'late-fee-polices', loadChildren: () => import('./fee-module/late-fee-policy/late-fee-policy.module').then(m => m.LateFeePolicyModule) },
   { path: 'student-monthly-fees', loadChildren: () => import('./fee-module/student-monthly-fee/student-monthly-fee.module').then(m => m.StudentMonthlyFeeModule) },
   { path: 'student-monthly-fee-lines', loadChildren: () => import('./fee-module/student-monthly-fee-line/student-monthly-fee-line.module').then(m => m.StudentMonthlyFeeLineModule) },
+  { path: 'check-fees-dashboard', loadChildren: () => import('./fee-module/check-fees-dashboard/check-fees-dashboard.module').then(m => m.CheckFeesDashboardModule) },
 ];
 
 @NgModule({
