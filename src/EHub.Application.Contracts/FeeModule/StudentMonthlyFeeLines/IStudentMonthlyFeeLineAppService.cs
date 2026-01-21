@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EHub.FeeModule.StudentMonthlyFees;
+using System;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
@@ -16,4 +17,7 @@ public interface IStudentMonthlyFeeLineAppService : IApplicationService
     Task UpdateAsync(Guid id, CreateUpdateStudentMonthlyFeeLineDto input);
 
     Task DeleteAsync(Guid id);
+    Task<BulkGenerateStudentMonthlyFeeResultDto> BulkGenerateAsync(BulkGenerateStudentMonthlyFeeDto input);
+
+    Task<CalculatedAmountsDto> CalculateAmountsAsync(CalculateFeeLineAmountsInput input);
 }

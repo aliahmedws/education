@@ -15,4 +15,5 @@ public class FeeStructureItemDto : FullAuditedEntityDto<Guid>
 
     // Optional for UI display (if you load FeeHead name)
     public string? FeeHeadName { get; set; }
+    public string? FeeStructureName { get; set; }
 }

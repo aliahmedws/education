@@ -42,4 +42,9 @@ public interface IStudentFeeDiscountRepository : IRepository<StudentFeeDiscount,
         int? startMonth,
         int? endMonth,
         Guid? exceptId = null);
+
+    Task<StudentFeeDiscount?> GetApplicableDiscountAsync(
+       Guid studentId,
+       Guid? feeHeadId,
+       DateTime month);
 }

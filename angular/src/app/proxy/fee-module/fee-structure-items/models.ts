@@ -14,6 +14,7 @@ export interface FeeStructureItemDto extends FullAuditedEntityDto<string> {
   monthlyAmount: number;
   isMandatory: boolean;
   feeHeadName?: string;
+  feeStructureName?: string;
 }
 
 export interface GetFeeStructureItemListInput extends PagedAndSortedResultRequestDto {

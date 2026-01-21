@@ -70,6 +70,11 @@ public class EHubPermissionDefinitionProvider : PermissionDefinitionProvider
         studentMonthlyFeesPermission.AddChild(EHubPermissions.StudentMonthlyFees.Edit, L("Permission:StudentMonthlyFees.Edit"));
         studentMonthlyFeesPermission.AddChild(EHubPermissions.StudentMonthlyFees.Delete, L("Permission:StudentMonthlyFees.Delete"));
 
+        var studentMonthlyFeeLinesPermission = myGroup.AddPermission(EHubPermissions.StudentMonthlyFeeLines.Default, L("Permission:StudentMonthlyFeeLines"));
+        studentMonthlyFeeLinesPermission.AddChild(EHubPermissions.StudentMonthlyFeeLines.Create, L("Permission:StudentMonthlyFeeLines.Create"));
+        studentMonthlyFeeLinesPermission.AddChild(EHubPermissions.StudentMonthlyFeeLines.Edit, L("Permission:StudentMonthlyFeeLines.Edit"));
+        studentMonthlyFeeLinesPermission.AddChild(EHubPermissions.StudentMonthlyFeeLines.Delete, L("Permission:StudentMonthlyFeeLines.Delete"));
+
 
     }
 

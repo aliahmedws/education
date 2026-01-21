@@ -1,4 +1,5 @@
 ﻿using EHub.FeeModule.FeeHeads;
+using EHub.FeeModule.FeeStructures;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,13 +17,16 @@ public class FeeStructureItemAppService : ApplicationService, IFeeStructureItemA
 {
     private readonly IRepository<FeeStructureItem, Guid> _repository;
     private readonly IRepository<FeeHead, Guid> _feeHeadRepository;
+    private readonly IRepository<FeeStructure, Guid> _feeStructureRepository;
 
     public FeeStructureItemAppService(
         IRepository<FeeStructureItem, Guid> repository,
-        IRepository<FeeHead, Guid> feeHeadRepository)
+        IRepository<FeeHead, Guid> feeHeadRepository,
+        IRepository<FeeStructure, Guid> feeStructureRepository)
     {
         _repository = repository;
         _feeHeadRepository = feeHeadRepository;
+        _feeStructureRepository = feeStructureRepository;
     }
 
     public async Task<FeeStructureItemDto> GetAsync(Guid id)
@@ -62,10 +66,18 @@ public class FeeStructureItemAppService : ApplicationService, IFeeStructureItemA
         var heads = await _feeHeadRepository.GetListAsync(x => feeHeadIds.Contains(x.Id));
         var headDict = heads.ToDictionary(x => x.Id, x => x.Name);
 
+        var feeStructureIds = dtos.Select(x => x.FeeStructureId).Distinct().ToList();
+        var feeStructures = await _feeStructureRepository.GetListAsync(x => feeStructureIds.Contains(x.Id));
+        var structureDict = feeStructures.ToDictionary(x => x.Id, x => $"{x.GradeLevel} {x.Shift} {x.Term}");
+
         foreach (var d in dtos)
         {
             if (headDict.TryGetValue(d.FeeHeadId, out var name))
                 d.FeeHeadName = name;
+
+            if (structureDict.TryGetValue(d.FeeStructureId, out var structureName))
+                d.FeeStructureName = structureName;
+
         }
 
         return new PagedResultDto<FeeStructureItemDto>(totalCount, dtos);

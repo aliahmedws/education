@@ -1,13 +1,32 @@
-import type { CreateUpdateStudentMonthlyFeeLineDto, GetStudentMonthlyFeeLineListInput, StudentMonthlyFeeLineDto } from './models';
+import type { BulkGenerateStudentMonthlyFeeResultDto, CalculateFeeLineAmountsInput, CalculatedAmountsDto, CreateUpdateStudentMonthlyFeeLineDto, GetStudentMonthlyFeeLineListInput, StudentMonthlyFeeLineDto } from './models';
 import { RestService, Rest } from '@abp/ng.core';
 import type { PagedResultDto } from '@abp/ng.core';
 import { Injectable } from '@angular/core';
+import type { BulkGenerateStudentMonthlyFeeDto } from '../student-monthly-fees/models';
 
 @Injectable({
   providedIn: 'root',
 })
 export class StudentMonthlyFeeLineService {
   apiName = 'Default';
+  
+
+  bulkGenerate = (input: BulkGenerateStudentMonthlyFeeDto, config?: Partial<Rest.Config>) =>
+    this.restService.request<any, BulkGenerateStudentMonthlyFeeResultDto>({
+      method: 'POST',
+      url: '/api/fee-module/student-monthly-fee-lines/bulk-generate',
+      body: input,
+    },
+    { apiName: this.apiName,...config });
+  
+
+  calculateAmounts = (input: CalculateFeeLineAmountsInput, config?: Partial<Rest.Config>) =>
+    this.restService.request<any, CalculatedAmountsDto>({
+      method: 'POST',
+      url: '/api/fee-module/student-monthly-fee-lines/calculate-amounts',
+      body: input,
+    },
+    { apiName: this.apiName,...config });
   
 
   create = (input: CreateUpdateStudentMonthlyFeeLineDto, config?: Partial<Rest.Config>) =>

@@ -109,8 +109,6 @@ public class EfCoreStudentFeeDiscountRepository
             .WhereIf(exceptId.HasValue, x => x.Id != exceptId!.Value);
 
         // Check for month overlap
-        // If either discount has no month range, it applies all year (potential overlap)
-        // If both have ranges, check if they overlap
         var overlapping = await query
             .Where(x =>
                 // Both have no month range
@@ -127,5 +125,46 @@ public class EfCoreStudentFeeDiscountRepository
             .AnyAsync();
 
         return overlapping;
+    }
+
+    public async Task<StudentFeeDiscount?> GetApplicableDiscountAsync(
+       Guid studentId,
+       Guid? feeHeadId,
+       DateTime month)
+    {
+        var dbSet = await GetDbSetAsync();
+
+        // Convert DateTime to YYYYMM format for comparison
+        // Assuming StartMonth and EndMonth are stored as integers in YYYYMM format
+        // Example: January 2026 = 202601
+        int monthValue = month.Year * 100 + month.Month;
+
+        // Priority:
+        // 1. Student-specific + FeeHead-specific + Active + Approved + Within date range
+        // 2. Student-specific + All FeeHeads (FeeHeadId is null) + Active + Approved + Within date range
+
+        var query = dbSet
+            .Where(d => d.StudentId == studentId)
+            .Where(d => d.IsActive)
+            .Where(d => (!d.StartMonth.HasValue || d.StartMonth.Value <= monthValue))
+            .Where(d => (!d.EndMonth.HasValue || d.EndMonth.Value >= monthValue));
+
+        // Try to find fee-head specific discount first
+        if (feeHeadId.HasValue)
+        {
+            var specificDiscount = await query
+                .Where(d => d.FeeHeadId == feeHeadId.Value)
+                .OrderByDescending(d => d.CreationTime)
+                .FirstOrDefaultAsync();
+
+            if (specificDiscount != null)
+                return specificDiscount;
+        }
+
+        // Fallback to general discount (all fee heads)
+        return await query
+            .Where(d => d.FeeHeadId == null)
+            .OrderByDescending(d => d.CreationTime)
+            .FirstOrDefaultAsync();
     }
 }

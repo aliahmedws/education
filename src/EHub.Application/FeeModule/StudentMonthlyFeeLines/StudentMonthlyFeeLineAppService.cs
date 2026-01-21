@@ -1,4 +1,7 @@
-﻿using EHub.FeeModule.StudentFeeProfiles;
+﻿using EHub.FeeModule.FeeStructureItems;
+using EHub.FeeModule.LateFeePolicies;
+using EHub.FeeModule.StudentFeeDiscounts;
+using EHub.FeeModule.StudentFeeProfiles;
 using EHub.FeeModule.StudentMonthlyFees;
 using EHub.Students;
 using System;
@@ -16,19 +19,24 @@ public class StudentMonthlyFeeLineAppService : ApplicationService, IStudentMonth
 {
     private readonly IStudentMonthlyFeeLineRepository _repo;
     private readonly IStudentRepository _studentRepo;
-    // FIX: You need a separate manager for StudentMonthlyFee (header)
-    private readonly StudentMonthlyFeeManager _monthlyFeeManager;  // For creating monthly fee headers
-    private readonly StudentMonthlyFeeLineManager _lineManager;     // For creating lines
+    private readonly StudentMonthlyFeeManager _monthlyFeeManager;
+    private readonly StudentMonthlyFeeLineManager _lineManager;
     private readonly IStudentFeeProfileRepository _profileRepo;
-    private readonly IStudentMonthlyFeeRepository _monthlyFeeRepo;  // Repository for monthly fees
+    private readonly IStudentMonthlyFeeRepository _monthlyFeeRepo;
+    private readonly IStudentFeeDiscountRepository _discountRepo;
+    private readonly ILateFeePolicyRepository _lateFeePolicyRepo;
+    IRepository<FeeStructureItem, Guid> _feeStructureItemRepo;
 
     public StudentMonthlyFeeLineAppService(
         IStudentMonthlyFeeLineRepository repo,
         IStudentRepository studentRepo,
-        StudentMonthlyFeeManager monthlyFeeManager,        // Inject proper manager
+        StudentMonthlyFeeManager monthlyFeeManager,
         StudentMonthlyFeeLineManager lineManager,
         IStudentFeeProfileRepository profileRepo,
-        IStudentMonthlyFeeRepository monthlyFeeRepo)       // Inject monthly fee repo
+        IStudentMonthlyFeeRepository monthlyFeeRepo,
+        IStudentFeeDiscountRepository discountRepo,
+        ILateFeePolicyRepository lateFeePolicyRepo,
+        IRepository<FeeStructureItem, Guid> feeStructureItemRepo)
     {
         _repo = repo;
         _studentRepo = studentRepo;
@@ -36,6 +44,9 @@ public class StudentMonthlyFeeLineAppService : ApplicationService, IStudentMonth
         _lineManager = lineManager;
         _profileRepo = profileRepo;
         _monthlyFeeRepo = monthlyFeeRepo;
+        _discountRepo = discountRepo;
+        _lateFeePolicyRepo = lateFeePolicyRepo;
+        _feeStructureItemRepo = feeStructureItemRepo;
     }
 
     public async Task<StudentMonthlyFeeLineDto> GetAsync(Guid id)
@@ -100,6 +111,93 @@ public class StudentMonthlyFeeLineAppService : ApplicationService, IStudentMonth
         await _repo.DeleteAsync(id);
     }
 
+    /// <summary>
+    /// Calculate discount amount for a student and fee head for a specific month
+    /// </summary>
+    // Fixed CalculateAmountsAsync method in StudentMonthlyFeeLineAppService
+
+    public async Task<CalculatedAmountsDto> CalculateAmountsAsync(CalculateFeeLineAmountsInput input)
+    {
+        var result = new CalculatedAmountsDto
+        {
+            ExpectedAmount = 0,
+            DiscountAmount = 0,
+            LateFeeAmount = 0
+        };
+
+        var monthlyFee = await _monthlyFeeRepo.GetAsync(input.StudentMonthlyFeeId);
+        var student = await _studentRepo.GetAsync(monthlyFee.StudentId);
+
+        // Get student's fee structure
+        var profile = await _profileRepo.FirstOrDefaultAsync(p =>
+            p.StudentId == student.Id &&
+            p.IsActive &&
+            p.EffectiveFrom <= monthlyFee.Month &&
+            (!p.EffectiveTo.HasValue || p.EffectiveTo.Value >= monthlyFee.Month)
+        );
+
+        // ✅ NEW: Get Expected Amount from FeeStructureItem
+        if (profile != null && input.FeeHeadId != Guid.Empty)
+        {
+            var structureItem = await _feeStructureItemRepo.FirstOrDefaultAsync(x =>
+                x.FeeStructureId == profile.FeeStructureId &&
+                x.FeeHeadId == input.FeeHeadId
+            );
+
+            if (structureItem != null)
+            {
+                result.ExpectedAmount = structureItem.MonthlyAmount;
+            }
+        }
+
+        // 1. Calculate Discount
+        var discount = await _discountRepo.GetApplicableDiscountAsync(
+            monthlyFee.StudentId,
+            input.FeeHeadId,
+            monthlyFee.Month);
+
+        if (discount != null && discount.IsActive && discount.ApprovedByStaffId != null)
+        {
+            result.DiscountAmount = discount.DiscountType switch
+            {
+                DiscountType.Percent => result.ExpectedAmount * (discount.Value / 100m),
+                DiscountType.Fixed => discount.Value,
+                _ => 0
+            };
+        }
+
+        // 2. Calculate Late Fee
+        if (monthlyFee.DueDate.HasValue && DateTime.Now > monthlyFee.DueDate.Value)
+        {
+            var policy = await _lateFeePolicyRepo.FindApplicablePolicyAsync(
+                (int?)student.GradeLevel,
+                (int?)student.Section,
+                (int?)student.Shift,
+                (int?)student.Term);
+
+            if (policy != null && policy.IsActive)
+            {
+                var daysLate = (DateTime.Now - monthlyFee.DueDate.Value).Days;
+
+                if (daysLate > policy.GraceDays)
+                {
+                    var effectiveDaysLate = daysLate - policy.GraceDays;
+                    var netAmount = result.ExpectedAmount - result.DiscountAmount;
+
+                    result.LateFeeAmount = policy.Type switch
+                    {
+                        LateFeeType.FixedOnce => policy.Value,
+                        LateFeeType.FixedPerDay => policy.Value * effectiveDaysLate,
+                        _ => 0
+                    };
+                }
+            }
+        }
+
+        result.NetAmount = result.ExpectedAmount - result.DiscountAmount + result.LateFeeAmount;
+
+        return result;
+    }
     public async Task<BulkGenerateStudentMonthlyFeeResultDto> BulkGenerateAsync(BulkGenerateStudentMonthlyFeeDto input)
     {
         var month = new DateTime(input.Month.Year, input.Month.Month, 1);
@@ -124,7 +222,6 @@ public class StudentMonthlyFeeLineAppService : ApplicationService, IStudentMonth
 
         foreach (var s in students)
         {
-            // FIX 1: Use the correct manager for creating monthly fee header
             var monthlyFee = await _monthlyFeeManager.CreateAsync(
                 s.Id,
                 month,
@@ -154,7 +251,6 @@ public class StudentMonthlyFeeLineAppService : ApplicationService, IStudentMonth
                 continue;
             }
 
-            // FIX 2: Explicitly type the tuple deconstruction
             (int linesCreated, int linesSkipped) = await _lineManager.GenerateLinesFromFeeStructureAsync(
                 monthlyFee.Id,
                 profile.FeeStructureId,

@@ -3797,6 +3797,40 @@
                     "type": "System.Void",
                     "typeSimple": "System.Void"
                   }
+                },
+                {
+                  "name": "BulkGenerateAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "EHub.FeeModule.StudentMonthlyFees.BulkGenerateStudentMonthlyFeeDto, EHub.Application.Contracts",
+                      "type": "EHub.FeeModule.StudentMonthlyFees.BulkGenerateStudentMonthlyFeeDto",
+                      "typeSimple": "EHub.FeeModule.StudentMonthlyFees.BulkGenerateStudentMonthlyFeeDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "EHub.FeeModule.StudentMonthlyFeeLines.BulkGenerateStudentMonthlyFeeResultDto",
+                    "typeSimple": "EHub.FeeModule.StudentMonthlyFeeLines.BulkGenerateStudentMonthlyFeeResultDto"
+                  }
+                },
+                {
+                  "name": "CalculateAmountsAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "EHub.FeeModule.StudentMonthlyFeeLines.CalculateFeeLineAmountsInput, EHub.Application.Contracts",
+                      "type": "EHub.FeeModule.StudentMonthlyFeeLines.CalculateFeeLineAmountsInput",
+                      "typeSimple": "EHub.FeeModule.StudentMonthlyFeeLines.CalculateFeeLineAmountsInput",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "EHub.FeeModule.StudentMonthlyFeeLines.CalculatedAmountsDto",
+                    "typeSimple": "EHub.FeeModule.StudentMonthlyFeeLines.CalculatedAmountsDto"
+                  }
                 }
               ]
             }
@@ -4051,6 +4085,80 @@
               "returnValue": {
                 "type": "System.Void",
                 "typeSimple": "System.Void"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "EHub.FeeModule.StudentMonthlyFeeLines.IStudentMonthlyFeeLineAppService"
+            },
+            "BulkGenerateAsyncByInput": {
+              "uniqueName": "BulkGenerateAsyncByInput",
+              "name": "BulkGenerateAsync",
+              "httpMethod": "POST",
+              "url": "api/fee-module/student-monthly-fee-lines/bulk-generate",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "EHub.FeeModule.StudentMonthlyFees.BulkGenerateStudentMonthlyFeeDto, EHub.Application.Contracts",
+                  "type": "EHub.FeeModule.StudentMonthlyFees.BulkGenerateStudentMonthlyFeeDto",
+                  "typeSimple": "EHub.FeeModule.StudentMonthlyFees.BulkGenerateStudentMonthlyFeeDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "EHub.FeeModule.StudentMonthlyFees.BulkGenerateStudentMonthlyFeeDto",
+                  "typeSimple": "EHub.FeeModule.StudentMonthlyFees.BulkGenerateStudentMonthlyFeeDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "EHub.FeeModule.StudentMonthlyFeeLines.BulkGenerateStudentMonthlyFeeResultDto",
+                "typeSimple": "EHub.FeeModule.StudentMonthlyFeeLines.BulkGenerateStudentMonthlyFeeResultDto"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "EHub.FeeModule.StudentMonthlyFeeLines.IStudentMonthlyFeeLineAppService"
+            },
+            "CalculateAmountsAsyncByInput": {
+              "uniqueName": "CalculateAmountsAsyncByInput",
+              "name": "CalculateAmountsAsync",
+              "httpMethod": "POST",
+              "url": "api/fee-module/student-monthly-fee-lines/calculate-amounts",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "EHub.FeeModule.StudentMonthlyFeeLines.CalculateFeeLineAmountsInput, EHub.Application.Contracts",
+                  "type": "EHub.FeeModule.StudentMonthlyFeeLines.CalculateFeeLineAmountsInput",
+                  "typeSimple": "EHub.FeeModule.StudentMonthlyFeeLines.CalculateFeeLineAmountsInput",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "EHub.FeeModule.StudentMonthlyFeeLines.CalculateFeeLineAmountsInput",
+                  "typeSimple": "EHub.FeeModule.StudentMonthlyFeeLines.CalculateFeeLineAmountsInput",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "EHub.FeeModule.StudentMonthlyFeeLines.CalculatedAmountsDto",
+                "typeSimple": "EHub.FeeModule.StudentMonthlyFeeLines.CalculatedAmountsDto"
               },
               "allowAnonymous": null,
               "implementFrom": "EHub.FeeModule.StudentMonthlyFeeLines.IStudentMonthlyFeeLineAppService"
@@ -9961,6 +10069,18 @@
           "minimum": null,
           "maximum": null,
           "regex": null
+        },
+        {
+          "name": "FeeStructureName",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
         }
       ]
     },
@@ -11573,6 +11693,177 @@
           "jsonName": null,
           "type": "System.Boolean",
           "typeSimple": "boolean",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        }
+      ]
+    },
+    "EHub.FeeModule.StudentMonthlyFeeLines.BulkGenerateStudentMonthlyFeeResultDto": {
+      "baseType": null,
+      "isEnum": false,
+      "enumNames": null,
+      "enumValues": null,
+      "genericArguments": null,
+      "properties": [
+        {
+          "name": "TotalStudents",
+          "jsonName": null,
+          "type": "System.Int32",
+          "typeSimple": "number",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "Created",
+          "jsonName": null,
+          "type": "System.Int32",
+          "typeSimple": "number",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "Skipped",
+          "jsonName": null,
+          "type": "System.Int32",
+          "typeSimple": "number",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "LinesCreated",
+          "jsonName": null,
+          "type": "System.Int32",
+          "typeSimple": "number",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "LinesSkipped",
+          "jsonName": null,
+          "type": "System.Int32",
+          "typeSimple": "number",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "MissingFeeProfile",
+          "jsonName": null,
+          "type": "System.Int32",
+          "typeSimple": "number",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        }
+      ]
+    },
+    "EHub.FeeModule.StudentMonthlyFeeLines.CalculatedAmountsDto": {
+      "baseType": null,
+      "isEnum": false,
+      "enumNames": null,
+      "enumValues": null,
+      "genericArguments": null,
+      "properties": [
+        {
+          "name": "ExpectedAmount",
+          "jsonName": null,
+          "type": "System.Decimal",
+          "typeSimple": "number",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "DiscountAmount",
+          "jsonName": null,
+          "type": "System.Decimal",
+          "typeSimple": "number",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "LateFeeAmount",
+          "jsonName": null,
+          "type": "System.Decimal",
+          "typeSimple": "number",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "NetAmount",
+          "jsonName": null,
+          "type": "System.Decimal",
+          "typeSimple": "number",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        }
+      ]
+    },
+    "EHub.FeeModule.StudentMonthlyFeeLines.CalculateFeeLineAmountsInput": {
+      "baseType": null,
+      "isEnum": false,
+      "enumNames": null,
+      "enumValues": null,
+      "genericArguments": null,
+      "properties": [
+        {
+          "name": "StudentMonthlyFeeId",
+          "jsonName": null,
+          "type": "System.Guid",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "FeeHeadId",
+          "jsonName": null,
+          "type": "System.Guid",
+          "typeSimple": "string",
           "isRequired": false,
           "minLength": null,
           "maxLength": null,

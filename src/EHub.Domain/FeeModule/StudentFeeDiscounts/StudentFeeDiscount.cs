@@ -23,8 +23,8 @@ public class StudentFeeDiscount : FullAuditedAggregateRoot<Guid>, IMultiTenant
     public DiscountType DiscountType { get; private set; }
     public decimal Value { get; private set; }
 
-    public int? StartMonth { get; private set; }
-    public int? EndMonth { get; private set; }
+    public int? StartMonth { get; set; }
+    public int? EndMonth { get;  set; }
 
     public string Reason { get; private set; } = string.Empty;
 

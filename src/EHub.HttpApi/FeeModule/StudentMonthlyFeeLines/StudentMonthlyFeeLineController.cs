@@ -1,4 +1,5 @@
 ﻿using Asp.Versioning;
+using EHub.FeeModule.StudentMonthlyFees;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
@@ -40,4 +41,16 @@ public class StudentMonthlyFeeLineController : AbpController, IStudentMonthlyFee
     [HttpDelete("{id}")]
     public Task DeleteAsync(Guid id)
         => _appService.DeleteAsync(id);
+
+    [HttpPost("bulk-generate")]
+    public Task<BulkGenerateStudentMonthlyFeeResultDto> BulkGenerateAsync(BulkGenerateStudentMonthlyFeeDto input)
+    {
+        return _appService.BulkGenerateAsync(input);
+    }
+
+    [HttpPost("calculate-amounts")]
+    public Task<CalculatedAmountsDto> CalculateAmountsAsync(CalculateFeeLineAmountsInput input)
+    {
+        return _appService.CalculateAmountsAsync(input);
+    }
 }

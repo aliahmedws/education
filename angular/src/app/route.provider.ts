@@ -139,7 +139,7 @@ function configureRoutes() {
       iconClass: 'fas fa-list',
       order: 1,
       layout: eLayoutType.application,
-      // requiredPolicy: 'EHub.FeeMenu.FeeHeads', // optional
+      requiredPolicy: 'EHub.FeeHeads', // optional
     },
     {
       path: '/fee-structures',
@@ -148,7 +148,7 @@ function configureRoutes() {
       iconClass: 'fas fa-sitemap',
       order: 2,
       layout: eLayoutType.application,
-      // requiredPolicy: 'EHub.FeeMenu.FeeStructures', // optional
+      requiredPolicy: 'EHub.FeeStructures', // optional
     },
     {
       path: '/fee-structure-items',
@@ -157,7 +157,7 @@ function configureRoutes() {
       iconClass: 'fas fa-layer-group',
       order: 3,
       layout: eLayoutType.application,
-      // requiredPolicy: 'EHub.FeeMenu.FeeStructures', // optional
+      requiredPolicy: 'EHub.FeeStructures', // optional
     },
     {
       path: '/student-fee-profiles',
@@ -194,6 +194,15 @@ function configureRoutes() {
       order: 7,
       layout: eLayoutType.application,
       // requiredPolicy: 'EHub.StudentMonthlyFees', // optional
+    },
+    {
+      path: '/student-monthly-fee-lines',
+      name: '::Menu:StudentMonthlyFeeLines',
+      parentName: '::Menu:Fees',
+      iconClass: 'fas fa-list-ul',
+      order: 8,
+      layout: eLayoutType.application,
+      // requiredPolicy: 'EHub.StudentMonthlyFeeLines',
     },
   ]);
 }

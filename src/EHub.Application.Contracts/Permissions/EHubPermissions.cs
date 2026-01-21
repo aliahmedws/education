@@ -91,4 +91,14 @@ public static class EHubPermissions
         public const string Edit = Default + ".Edit";
         public const string Delete = Default + ".Delete";
     }
+
+    public static class StudentMonthlyFeeLines
+    {
+        public const string Default = GroupName + ".StudentMonthlyFeeLines";
+        public const string Create = Default + ".Create";
+        public const string Edit = Default + ".Edit";
+        public const string Delete = Default + ".Delete";
+    }
+
+
 }
