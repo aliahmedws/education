@@ -376,7 +376,7 @@ public class StudentMonthlyFeeLineAppService : ApplicationService, IStudentMonth
                 Pending = g.Sum(x => x.Net) - g.Sum(x => x.Paid),
             })
             .OrderByDescending(x => x.Pending)
-            .Take(20)
+            .Take(200)
             .ToList();
 
         return result;

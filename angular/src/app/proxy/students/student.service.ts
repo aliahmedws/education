@@ -1,4 +1,4 @@
-import type { CreateStudentDto, GetStudentListDto, StudentDto, StudentLookupDto, UpdateStudentDto } from './models';
+import type { CreateStudentDto, GenerateStudentImportTemplateDto, GetStudentListDto, ImportStudentResultDto, StudentDto, StudentLookupDto, UpdateStudentDto } from './models';
 import { RestService, Rest } from '@abp/ng.core';
 import type { PagedResultDto } from '@abp/ng.core';
 import { Injectable } from '@angular/core';
@@ -27,6 +27,16 @@ export class StudentService {
     { apiName: this.apiName,...config });
   
 
+  downloadImportTemplate = (input: GenerateStudentImportTemplateDto, config?: Partial<Rest.Config>) =>
+    this.restService.request<any, Blob>({
+      method: 'POST',
+      responseType: 'blob',
+      url: '/api/app/students/download-import-template',
+      body: input,
+    },
+    { apiName: this.apiName,...config });
+  
+
   get = (id: string, config?: Partial<Rest.Config>) =>
     this.restService.request<any, StudentDto>({
       method: 'GET',
@@ -48,6 +58,14 @@ export class StudentService {
     this.restService.request<any, StudentLookupDto[]>({
       method: 'GET',
       url: '/api/app/students/get-student-lookup-async',
+    },
+    { apiName: this.apiName,...config });
+  
+
+  importFromExcel = (file: FormData, config?: Partial<Rest.Config>) =>
+    this.restService.request<any, ImportStudentResultDto>({
+      method: 'POST',
+      url: '/api/app/students/import-from-excel',
     },
     { apiName: this.apiName,...config });
   

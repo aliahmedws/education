@@ -47,6 +47,13 @@ export interface CreateStudentDto {
   accommodations?: string;
 }
 
+export interface GenerateStudentImportTemplateDto extends EntityDto {
+  gradeLevel?: GradeLevel;
+  section?: Section;
+  extraEmptyRows: number;
+  includeExistingStudents: boolean;
+}
+
 export interface GetStudentListDto extends PagedAndSortedResultRequestDto {
   filter?: string;
   admissionNo?: string;
@@ -59,6 +66,14 @@ export interface GetStudentListDto extends PagedAndSortedResultRequestDto {
   dob?: string;
   gender?: Gender;
   status?: Status;
+}
+
+export interface ImportStudentResultDto {
+  totalRows: number;
+  skippedRows: number;
+  created: number;
+  updated: number;
+  errors: string[];
 }
 
 export interface StudentDto extends EntityDto<string> {

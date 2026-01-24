@@ -6416,6 +6416,40 @@
                     "type": "System.Collections.Generic.List<EHub.Students.StudentLookupDto>",
                     "typeSimple": "[EHub.Students.StudentLookupDto]"
                   }
+                },
+                {
+                  "name": "DownloadImportTemplateAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "EHub.Students.GenerateStudentImportTemplateDto, EHub.Application.Contracts",
+                      "type": "EHub.Students.GenerateStudentImportTemplateDto",
+                      "typeSimple": "EHub.Students.GenerateStudentImportTemplateDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Abp.Content.IRemoteStreamContent",
+                    "typeSimple": "Volo.Abp.Content.IRemoteStreamContent"
+                  }
+                },
+                {
+                  "name": "ImportFromExcelAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "file",
+                      "typeAsString": "Volo.Abp.Content.IRemoteStreamContent, Volo.Abp.Core",
+                      "type": "Volo.Abp.Content.IRemoteStreamContent",
+                      "typeSimple": "Volo.Abp.Content.IRemoteStreamContent",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "EHub.Students.ImportStudentResultDto",
+                    "typeSimple": "EHub.Students.ImportStudentResultDto"
+                  }
                 }
               ]
             }
@@ -6793,6 +6827,104 @@
               "returnValue": {
                 "type": "System.Void",
                 "typeSimple": "System.Void"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "EHub.Students.IStudentAppService"
+            },
+            "DownloadImportTemplateAsyncByInput": {
+              "uniqueName": "DownloadImportTemplateAsyncByInput",
+              "name": "DownloadImportTemplateAsync",
+              "httpMethod": "POST",
+              "url": "api/app/students/download-import-template",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "EHub.Students.GenerateStudentImportTemplateDto, EHub.Application.Contracts",
+                  "type": "EHub.Students.GenerateStudentImportTemplateDto",
+                  "typeSimple": "EHub.Students.GenerateStudentImportTemplateDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "EHub.Students.GenerateStudentImportTemplateDto",
+                  "typeSimple": "EHub.Students.GenerateStudentImportTemplateDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Abp.Content.IRemoteStreamContent",
+                "typeSimple": "Volo.Abp.Content.IRemoteStreamContent"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "EHub.Students.IStudentAppService"
+            },
+            "ImportFromExcelAsyncByFile": {
+              "uniqueName": "ImportFromExcelAsyncByFile",
+              "name": "ImportFromExcelAsync",
+              "httpMethod": "POST",
+              "url": "api/app/students/import-from-excel",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "file",
+                  "typeAsString": "Volo.Abp.Content.IRemoteStreamContent, Volo.Abp.Core",
+                  "type": "Volo.Abp.Content.IRemoteStreamContent",
+                  "typeSimple": "Volo.Abp.Content.IRemoteStreamContent",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "file",
+                  "name": "FileName",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Form",
+                  "descriptorName": "file"
+                },
+                {
+                  "nameOnMethod": "file",
+                  "name": "ContentType",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Form",
+                  "descriptorName": "file"
+                },
+                {
+                  "nameOnMethod": "file",
+                  "name": "ContentLength",
+                  "jsonName": null,
+                  "type": "System.Int64?",
+                  "typeSimple": "number?",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Form",
+                  "descriptorName": "file"
+                }
+              ],
+              "returnValue": {
+                "type": "EHub.Students.ImportStudentResultDto",
+                "typeSimple": "EHub.Students.ImportStudentResultDto"
               },
               "allowAnonymous": null,
               "implementFrom": "EHub.Students.IStudentAppService"
@@ -16584,6 +16716,63 @@
       "genericArguments": null,
       "properties": null
     },
+    "EHub.Students.GenerateStudentImportTemplateDto": {
+      "baseType": "Volo.Abp.Application.Dtos.EntityDto",
+      "isEnum": false,
+      "enumNames": null,
+      "enumValues": null,
+      "genericArguments": null,
+      "properties": [
+        {
+          "name": "GradeLevel",
+          "jsonName": null,
+          "type": "EHub.Students.GradeLevel",
+          "typeSimple": "enum",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "Section",
+          "jsonName": null,
+          "type": "EHub.Students.Section",
+          "typeSimple": "enum",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "ExtraEmptyRows",
+          "jsonName": null,
+          "type": "System.Int32",
+          "typeSimple": "number",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "IncludeExistingStudents",
+          "jsonName": null,
+          "type": "System.Boolean",
+          "typeSimple": "boolean",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        }
+      ]
+    },
     "EHub.Students.GetStudentListDto": {
       "baseType": "Volo.Abp.Application.Dtos.PagedAndSortedResultRequestDto",
       "isEnum": false,
@@ -16778,6 +16967,75 @@
       ],
       "genericArguments": null,
       "properties": null
+    },
+    "EHub.Students.ImportStudentResultDto": {
+      "baseType": null,
+      "isEnum": false,
+      "enumNames": null,
+      "enumValues": null,
+      "genericArguments": null,
+      "properties": [
+        {
+          "name": "TotalRows",
+          "jsonName": null,
+          "type": "System.Int32",
+          "typeSimple": "number",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "SkippedRows",
+          "jsonName": null,
+          "type": "System.Int32",
+          "typeSimple": "number",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "Created",
+          "jsonName": null,
+          "type": "System.Int32",
+          "typeSimple": "number",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "Updated",
+          "jsonName": null,
+          "type": "System.Int32",
+          "typeSimple": "number",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "Errors",
+          "jsonName": null,
+          "type": "[System.String]",
+          "typeSimple": "[string]",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        }
+      ]
     },
     "EHub.Students.Province": {
       "baseType": "System.Enum",
