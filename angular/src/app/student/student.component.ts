@@ -17,11 +17,10 @@ import {
   GetStudentListDto,
   Section,
   GradeLevel,
-  ImportStudentResultDto,
 } from '../proxy/students';
 import { Router } from '@angular/router';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { StudentImportApi } from 'src/custom-services/import-student';
+import { ImportStudentResultDto, StudentImportApi } from 'src/custom-services/import-student';
 
 @Component({
   selector: 'app-student',
@@ -203,8 +202,11 @@ export class StudentComponent implements OnInit {
       next: res => {
         this.importResult = res;
 
-        // Optional: show a better summary message
-        const msg = `Imported. Total: ${res.totalRows}, Skipped: ${res.skippedRows}, Created: ${res.created}, Updated: ${res.updated}`;
+        const total = res.totalRows ?? 0;
+        const skipped = res.skippedRows ?? 0;
+        const imported = res.imported ?? 0;
+
+        const msg = `Imported. Total: ${total}, Skipped: ${skipped}, Imported: ${imported}`;
         this.toaster.success(msg);
 
         if (res.errors?.length) {

@@ -6311,149 +6311,7 @@
           "isIntegrationService": false,
           "apiVersion": null,
           "type": "EHub.Students.StudentController",
-          "interfaces": [
-            {
-              "type": "EHub.Students.IStudentAppService",
-              "name": "IStudentAppService",
-              "methods": [
-                {
-                  "name": "GetAsync",
-                  "parametersOnMethod": [
-                    {
-                      "name": "id",
-                      "typeAsString": "System.Guid, System.Private.CoreLib",
-                      "type": "System.Guid",
-                      "typeSimple": "string",
-                      "isOptional": false,
-                      "defaultValue": null
-                    }
-                  ],
-                  "returnValue": {
-                    "type": "EHub.Students.StudentDto",
-                    "typeSimple": "EHub.Students.StudentDto"
-                  }
-                },
-                {
-                  "name": "GetListAsync",
-                  "parametersOnMethod": [
-                    {
-                      "name": "input",
-                      "typeAsString": "EHub.Students.GetStudentListDto, EHub.Application.Contracts",
-                      "type": "EHub.Students.GetStudentListDto",
-                      "typeSimple": "EHub.Students.GetStudentListDto",
-                      "isOptional": false,
-                      "defaultValue": null
-                    }
-                  ],
-                  "returnValue": {
-                    "type": "Volo.Abp.Application.Dtos.PagedResultDto<EHub.Students.StudentDto>",
-                    "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<EHub.Students.StudentDto>"
-                  }
-                },
-                {
-                  "name": "CreateAsync",
-                  "parametersOnMethod": [
-                    {
-                      "name": "input",
-                      "typeAsString": "EHub.Students.CreateStudentDto, EHub.Application.Contracts",
-                      "type": "EHub.Students.CreateStudentDto",
-                      "typeSimple": "EHub.Students.CreateStudentDto",
-                      "isOptional": false,
-                      "defaultValue": null
-                    }
-                  ],
-                  "returnValue": {
-                    "type": "EHub.Students.StudentDto",
-                    "typeSimple": "EHub.Students.StudentDto"
-                  }
-                },
-                {
-                  "name": "UpdateAsync",
-                  "parametersOnMethod": [
-                    {
-                      "name": "id",
-                      "typeAsString": "System.Guid, System.Private.CoreLib",
-                      "type": "System.Guid",
-                      "typeSimple": "string",
-                      "isOptional": false,
-                      "defaultValue": null
-                    },
-                    {
-                      "name": "input",
-                      "typeAsString": "EHub.Students.UpdateStudentDto, EHub.Application.Contracts",
-                      "type": "EHub.Students.UpdateStudentDto",
-                      "typeSimple": "EHub.Students.UpdateStudentDto",
-                      "isOptional": false,
-                      "defaultValue": null
-                    }
-                  ],
-                  "returnValue": {
-                    "type": "System.Void",
-                    "typeSimple": "System.Void"
-                  }
-                },
-                {
-                  "name": "DeleteAsync",
-                  "parametersOnMethod": [
-                    {
-                      "name": "id",
-                      "typeAsString": "System.Guid, System.Private.CoreLib",
-                      "type": "System.Guid",
-                      "typeSimple": "string",
-                      "isOptional": false,
-                      "defaultValue": null
-                    }
-                  ],
-                  "returnValue": {
-                    "type": "System.Void",
-                    "typeSimple": "System.Void"
-                  }
-                },
-                {
-                  "name": "GetStudentLookupAsync",
-                  "parametersOnMethod": [],
-                  "returnValue": {
-                    "type": "System.Collections.Generic.List<EHub.Students.StudentLookupDto>",
-                    "typeSimple": "[EHub.Students.StudentLookupDto]"
-                  }
-                },
-                {
-                  "name": "DownloadImportTemplateAsync",
-                  "parametersOnMethod": [
-                    {
-                      "name": "input",
-                      "typeAsString": "EHub.Students.GenerateStudentImportTemplateDto, EHub.Application.Contracts",
-                      "type": "EHub.Students.GenerateStudentImportTemplateDto",
-                      "typeSimple": "EHub.Students.GenerateStudentImportTemplateDto",
-                      "isOptional": false,
-                      "defaultValue": null
-                    }
-                  ],
-                  "returnValue": {
-                    "type": "Volo.Abp.Content.IRemoteStreamContent",
-                    "typeSimple": "Volo.Abp.Content.IRemoteStreamContent"
-                  }
-                },
-                {
-                  "name": "ImportFromExcelAsync",
-                  "parametersOnMethod": [
-                    {
-                      "name": "file",
-                      "typeAsString": "Volo.Abp.Content.IRemoteStreamContent, Volo.Abp.Core",
-                      "type": "Volo.Abp.Content.IRemoteStreamContent",
-                      "typeSimple": "Volo.Abp.Content.IRemoteStreamContent",
-                      "isOptional": false,
-                      "defaultValue": null
-                    }
-                  ],
-                  "returnValue": {
-                    "type": "EHub.Students.ImportStudentResultDto",
-                    "typeSimple": "EHub.Students.ImportStudentResultDto"
-                  }
-                }
-              ]
-            }
-          ],
+          "interfaces": [],
           "actions": {
             "CreateAsyncByInput": {
               "uniqueName": "CreateAsyncByInput",
@@ -6490,7 +6348,7 @@
                 "typeSimple": "EHub.Students.StudentDto"
               },
               "allowAnonymous": null,
-              "implementFrom": "EHub.Students.IStudentAppService"
+              "implementFrom": "EHub.Students.StudentController"
             },
             "DeleteAsyncById": {
               "uniqueName": "DeleteAsyncById",
@@ -6527,7 +6385,7 @@
                 "typeSimple": "System.Void"
               },
               "allowAnonymous": null,
-              "implementFrom": "EHub.Students.IStudentAppService"
+              "implementFrom": "EHub.Students.StudentController"
             },
             "GetAsyncById": {
               "uniqueName": "GetAsyncById",
@@ -6564,7 +6422,7 @@
                 "typeSimple": "EHub.Students.StudentDto"
               },
               "allowAnonymous": null,
-              "implementFrom": "EHub.Students.IStudentAppService"
+              "implementFrom": "EHub.Students.StudentController"
             },
             "GetListAsyncByInput": {
               "uniqueName": "GetListAsyncByInput",
@@ -6757,7 +6615,7 @@
                 "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<EHub.Students.StudentDto>"
               },
               "allowAnonymous": null,
-              "implementFrom": "EHub.Students.IStudentAppService"
+              "implementFrom": "EHub.Students.StudentController"
             },
             "GetStudentLookupAsync": {
               "uniqueName": "GetStudentLookupAsync",
@@ -6772,7 +6630,7 @@
                 "typeSimple": "[EHub.Students.StudentLookupDto]"
               },
               "allowAnonymous": null,
-              "implementFrom": "EHub.Students.IStudentAppService"
+              "implementFrom": "EHub.Students.StudentController"
             },
             "UpdateAsyncByIdAndInput": {
               "uniqueName": "UpdateAsyncByIdAndInput",
@@ -6829,7 +6687,7 @@
                 "typeSimple": "System.Void"
               },
               "allowAnonymous": null,
-              "implementFrom": "EHub.Students.IStudentAppService"
+              "implementFrom": "EHub.Students.StudentController"
             },
             "DownloadImportTemplateAsyncByInput": {
               "uniqueName": "DownloadImportTemplateAsyncByInput",
@@ -6866,68 +6724,7 @@
                 "typeSimple": "Volo.Abp.Content.IRemoteStreamContent"
               },
               "allowAnonymous": null,
-              "implementFrom": "EHub.Students.IStudentAppService"
-            },
-            "ImportFromExcelAsyncByFile": {
-              "uniqueName": "ImportFromExcelAsyncByFile",
-              "name": "ImportFromExcelAsync",
-              "httpMethod": "POST",
-              "url": "api/app/students/import-from-excel",
-              "supportedVersions": [],
-              "parametersOnMethod": [
-                {
-                  "name": "file",
-                  "typeAsString": "Volo.Abp.Content.IRemoteStreamContent, Volo.Abp.Core",
-                  "type": "Volo.Abp.Content.IRemoteStreamContent",
-                  "typeSimple": "Volo.Abp.Content.IRemoteStreamContent",
-                  "isOptional": false,
-                  "defaultValue": null
-                }
-              ],
-              "parameters": [
-                {
-                  "nameOnMethod": "file",
-                  "name": "FileName",
-                  "jsonName": null,
-                  "type": "System.String",
-                  "typeSimple": "string",
-                  "isOptional": false,
-                  "defaultValue": null,
-                  "constraintTypes": null,
-                  "bindingSourceId": "Form",
-                  "descriptorName": "file"
-                },
-                {
-                  "nameOnMethod": "file",
-                  "name": "ContentType",
-                  "jsonName": null,
-                  "type": "System.String",
-                  "typeSimple": "string",
-                  "isOptional": false,
-                  "defaultValue": null,
-                  "constraintTypes": null,
-                  "bindingSourceId": "Form",
-                  "descriptorName": "file"
-                },
-                {
-                  "nameOnMethod": "file",
-                  "name": "ContentLength",
-                  "jsonName": null,
-                  "type": "System.Int64?",
-                  "typeSimple": "number?",
-                  "isOptional": false,
-                  "defaultValue": null,
-                  "constraintTypes": null,
-                  "bindingSourceId": "Form",
-                  "descriptorName": "file"
-                }
-              ],
-              "returnValue": {
-                "type": "EHub.Students.ImportStudentResultDto",
-                "typeSimple": "EHub.Students.ImportStudentResultDto"
-              },
-              "allowAnonymous": null,
-              "implementFrom": "EHub.Students.IStudentAppService"
+              "implementFrom": "EHub.Students.StudentController"
             }
           }
         },
@@ -12256,6 +12053,18 @@
           "regex": null
         },
         {
+          "name": "AsOfDate",
+          "jsonName": null,
+          "type": "System.DateTime?",
+          "typeSimple": "string?",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
           "name": "GradeLevel",
           "jsonName": null,
           "type": "System.Int32?",
@@ -16967,75 +16776,6 @@
       ],
       "genericArguments": null,
       "properties": null
-    },
-    "EHub.Students.ImportStudentResultDto": {
-      "baseType": null,
-      "isEnum": false,
-      "enumNames": null,
-      "enumValues": null,
-      "genericArguments": null,
-      "properties": [
-        {
-          "name": "TotalRows",
-          "jsonName": null,
-          "type": "System.Int32",
-          "typeSimple": "number",
-          "isRequired": false,
-          "minLength": null,
-          "maxLength": null,
-          "minimum": null,
-          "maximum": null,
-          "regex": null
-        },
-        {
-          "name": "SkippedRows",
-          "jsonName": null,
-          "type": "System.Int32",
-          "typeSimple": "number",
-          "isRequired": false,
-          "minLength": null,
-          "maxLength": null,
-          "minimum": null,
-          "maximum": null,
-          "regex": null
-        },
-        {
-          "name": "Created",
-          "jsonName": null,
-          "type": "System.Int32",
-          "typeSimple": "number",
-          "isRequired": false,
-          "minLength": null,
-          "maxLength": null,
-          "minimum": null,
-          "maximum": null,
-          "regex": null
-        },
-        {
-          "name": "Updated",
-          "jsonName": null,
-          "type": "System.Int32",
-          "typeSimple": "number",
-          "isRequired": false,
-          "minLength": null,
-          "maxLength": null,
-          "minimum": null,
-          "maximum": null,
-          "regex": null
-        },
-        {
-          "name": "Errors",
-          "jsonName": null,
-          "type": "[System.String]",
-          "typeSimple": "[string]",
-          "isRequired": false,
-          "minLength": null,
-          "maxLength": null,
-          "minimum": null,
-          "maximum": null,
-          "regex": null
-        }
-      ]
     },
     "EHub.Students.Province": {
       "baseType": "System.Enum",

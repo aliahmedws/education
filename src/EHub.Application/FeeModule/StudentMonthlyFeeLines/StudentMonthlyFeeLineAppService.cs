@@ -302,6 +302,14 @@ public class StudentMonthlyFeeLineAppService : ApplicationService, IStudentMonth
                 x.Month < monthEnd &&
                 studentIdsQ.Contains(x.StudentId));
 
+        if (input.AsOfDate.HasValue)
+        {
+            var asOfExclusive = input.AsOfDate.Value.Date.AddDays(1); // include entire day
+            monthlyFeesQ = monthlyFeesQ.Where(x =>
+                x.DueDate.HasValue &&
+                x.DueDate.Value < asOfExclusive);
+        }
+
         // 3) Lines + FeeHead join
         var linesQ = await _repo.GetQueryableAsync();
 
@@ -375,6 +383,7 @@ public class StudentMonthlyFeeLineAppService : ApplicationService, IStudentMonth
                 Paid = g.Sum(x => x.Paid),
                 Pending = g.Sum(x => x.Net) - g.Sum(x => x.Paid),
             })
+            .Where(x => x.Pending > 0)
             .OrderByDescending(x => x.Pending)
             .Take(200)
             .ToList();

@@ -1,4 +1,4 @@
-import type { CreateStudentDto, GenerateStudentImportTemplateDto, GetStudentListDto, ImportStudentResultDto, StudentDto, StudentLookupDto, UpdateStudentDto } from './models';
+import type { CreateStudentDto, GenerateStudentImportTemplateDto, GetStudentListDto, StudentDto, StudentLookupDto, UpdateStudentDto } from './models';
 import { RestService, Rest } from '@abp/ng.core';
 import type { PagedResultDto } from '@abp/ng.core';
 import { Injectable } from '@angular/core';
@@ -58,14 +58,6 @@ export class StudentService {
     this.restService.request<any, StudentLookupDto[]>({
       method: 'GET',
       url: '/api/app/students/get-student-lookup-async',
-    },
-    { apiName: this.apiName,...config });
-  
-
-  importFromExcel = (file: FormData, config?: Partial<Rest.Config>) =>
-    this.restService.request<any, ImportStudentResultDto>({
-      method: 'POST',
-      url: '/api/app/students/import-from-excel',
     },
     { apiName: this.apiName,...config });
   

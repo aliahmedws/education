@@ -1,7 +1,13 @@
 import { Injectable } from '@angular/core';
 import { RestService } from '@abp/ng.core';
 import { Observable } from 'rxjs';
-import { ImportStudentResultDto } from 'src/app/proxy/students/models';
+
+export interface ImportStudentResultDto {
+  totalRows?: number;
+  imported?: number;
+  skippedRows?: number;
+  errors?: string[];
+}
 
 @Injectable({ providedIn: 'root' })
 export class StudentImportApi {

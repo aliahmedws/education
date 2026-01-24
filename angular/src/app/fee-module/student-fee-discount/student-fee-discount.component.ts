@@ -3,19 +3,35 @@ import { ConfirmationService, ToasterService, Confirmation } from '@abp/ng.theme
 import { Component, inject, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { FeeHeadLookupDto, FeeHeadService } from 'src/app/proxy/fee-module/fee-heads';
-import { StudentFeeDiscountDto, GetStudentFeeDiscountListInput, DiscountType, BulkAssignStudentFeeDiscountResultDto, BulkAssignStudentFeeDiscountDto, StudentFeeDiscountService, CreateUpdateStudentFeeDiscountDto, discountTypeOptions } from 'src/app/proxy/fee-module/student-fee-discounts';
+import {
+  StudentFeeDiscountDto,
+  GetStudentFeeDiscountListInput,
+  DiscountType,
+  BulkAssignStudentFeeDiscountResultDto,
+  BulkAssignStudentFeeDiscountDto,
+  StudentFeeDiscountService,
+  CreateUpdateStudentFeeDiscountDto,
+  discountTypeOptions,
+} from 'src/app/proxy/fee-module/student-fee-discounts';
 import { StaffLookupDto, StaffService } from 'src/app/proxy/staffs';
-import { StudentLookupDto, gradeLevelOptions, sectionOptions, shiftOptions, termOptions, StudentService } from 'src/app/proxy/students';
+import {
+  StudentLookupDto,
+  gradeLevelOptions,
+  sectionOptions,
+  shiftOptions,
+  termOptions,
+  StudentService,
+} from 'src/app/proxy/students';
 
 @Component({
   selector: 'app-student-fee-discount',
   standalone: false,
   templateUrl: './student-fee-discount.component.html',
   styleUrl: './student-fee-discount.component.scss',
-   providers: [ListService]
+  providers: [ListService],
 })
-export class StudentFeeDiscountComponent  implements OnInit {
-discounts = { items: [], totalCount: 0 } as PagedResultDto<StudentFeeDiscountDto>;
+export class StudentFeeDiscountComponent implements OnInit {
+  discounts = { items: [], totalCount: 0 } as PagedResultDto<StudentFeeDiscountDto>;
 
   showFilter = false;
 
@@ -43,7 +59,7 @@ discounts = { items: [], totalCount: 0 } as PagedResultDto<StudentFeeDiscountDto
     { value: 9, label: '::Month.September' },
     { value: 10, label: '::Month.October' },
     { value: 11, label: '::Month.November' },
-    { value: 12, label: '::Month.December' }
+    { value: 12, label: '::Month.December' },
   ];
 
   // ---- BULK ASSIGN ----
@@ -114,9 +130,6 @@ discounts = { items: [], totalCount: 0 } as PagedResultDto<StudentFeeDiscountDto
 
   save(): void {
     if (this.form.invalid) return;
-
-    this.form.value.discountType = DiscountType.Percent;
-
     const input = this.form.value as CreateUpdateStudentFeeDiscountDto;
 
     if (this.selected.id) {
@@ -152,15 +165,13 @@ discounts = { items: [], totalCount: 0 } as PagedResultDto<StudentFeeDiscountDto
     this.form = this.fb.group({
       studentId: [this.selected.studentId || null, Validators.required],
       feeHeadId: [this.selected.feeHeadId || null], // nullable - applies to total if null
-      discountType: [
-       { value: DiscountType.Percent, disabled: true }, [Validators.required]
-      ],
+      discountType: [this.selected.discountType ?? DiscountType.Percent, [Validators.required]],
       value: [this.selected.value || 0, [Validators.required, Validators.min(0)]],
       startMonth: [this.selected.startMonth || null],
       endMonth: [this.selected.endMonth || null],
       reason: [this.selected.reason || '', [Validators.required, Validators.maxLength(500)]],
       approvedByStaffId: [this.selected.approvedByStaffId || null],
-      isActive: [this.selected.id ? this.selected.isActive : true]
+      isActive: [this.selected.id ? this.selected.isActive : true],
     });
   }
 
@@ -203,7 +214,9 @@ discounts = { items: [], totalCount: 0 } as PagedResultDto<StudentFeeDiscountDto
   }
 
   discountTypeLabel(type: DiscountType): string {
-    return type === DiscountType.Fixed ? '::Enum:DiscountType.Fixed' : '::Enum:DiscountType.Percent';
+    return type === DiscountType.Fixed
+      ? '::Enum:DiscountType.Fixed'
+      : '::Enum:DiscountType.Percent';
   }
 
   monthLabel(month: number | null): string {
@@ -222,7 +235,7 @@ discounts = { items: [], totalCount: 0 } as PagedResultDto<StudentFeeDiscountDto
       term: [this.selectedBulk.term || null],
 
       feeHeadId: [this.selectedBulk.feeHeadId || null], // nullable
-      discountType: [{ value: DiscountType.Percent, disabled: true }],
+      discountType: [this.selectedBulk.discountType ?? DiscountType.Percent, [Validators.required]],
       value: [this.selectedBulk.value || 0, [Validators.required, Validators.min(0)]],
 
       startMonth: [this.selectedBulk.startMonth || null],
@@ -232,7 +245,7 @@ discounts = { items: [], totalCount: 0 } as PagedResultDto<StudentFeeDiscountDto
       approvedByStaffId: [this.selectedBulk.approvedByStaffId || null],
 
       isActive: [this.selectedBulk.isActive ?? true],
-      skipExisting: [this.selectedBulk.skipExisting ?? true]
+      skipExisting: [this.selectedBulk.skipExisting ?? true],
     });
 
     this.isBulkModalOpen = true;
@@ -259,7 +272,7 @@ discounts = { items: [], totalCount: 0 } as PagedResultDto<StudentFeeDiscountDto
       term: v.term,
 
       feeHeadId: v.feeHeadId,
-      discountType: DiscountType.Percent,
+      discountType: v.discountType,
       value: v.value,
 
       startMonth: v.startMonth,
@@ -269,24 +282,21 @@ discounts = { items: [], totalCount: 0 } as PagedResultDto<StudentFeeDiscountDto
       approvedByStaffId: v.approvedByStaffId,
 
       isActive: !!v.isActive,
-      skipExisting: !!v.skipExisting
+      skipExisting: !!v.skipExisting,
     };
 
     this.service.bulkAssign(input).subscribe({
-      next: (res) => {
+      next: res => {
         this.bulkResult = res;
         this.toaster.success('::BulkAssignedSuccessfully');
         this.list.get(); // refresh table
       },
-      error: (err) => {
+      error: err => {
         const msg =
-          err?.error?.error?.message ||
-          err?.error?.message ||
-          err?.message ||
-          '::UnexpectedError';
+          err?.error?.error?.message || err?.error?.message || err?.message || '::UnexpectedError';
         this.toaster.error(msg);
       },
-      complete: () => (this.isBulkSubmitting = false)
+      complete: () => (this.isBulkSubmitting = false),
     });
   }
 }

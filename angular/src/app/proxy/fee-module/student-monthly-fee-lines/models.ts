@@ -36,6 +36,7 @@ export interface CheckFeesDashboardDto {
 
 export interface CheckFeesDashboardInput extends PagedAndSortedResultRequestDto {
   month?: string;
+  asOfDate?: string;
   gradeLevel?: number;
   section?: number;
   shift?: number;

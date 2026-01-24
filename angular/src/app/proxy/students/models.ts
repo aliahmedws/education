@@ -68,14 +68,6 @@ export interface GetStudentListDto extends PagedAndSortedResultRequestDto {
   status?: Status;
 }
 
-export interface ImportStudentResultDto {
-  totalRows: number;
-  skippedRows: number;
-  created: number;
-  updated: number;
-  errors: string[];
-}
-
 export interface StudentDto extends EntityDto<string> {
   tenantId?: string;
   admissionNo?: string;
